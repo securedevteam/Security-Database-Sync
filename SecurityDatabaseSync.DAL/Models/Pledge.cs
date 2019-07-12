@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace SecurityDatabaseSync.DAL.Models
 {
@@ -7,7 +8,9 @@ namespace SecurityDatabaseSync.DAL.Models
     /// </summary>
     public class Pledge
     {
-        public int Id { get; set; }
+        //public int Id { get; set; }
+
+        [Key]
         public int Code { get; set; }
         public string Prizn { get; set; }
         public string ID { get; set; }

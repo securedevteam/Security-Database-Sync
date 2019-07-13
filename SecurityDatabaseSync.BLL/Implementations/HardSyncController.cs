@@ -12,7 +12,7 @@ namespace SecurityDatabaseSync.BLL.Implementations
     /// <summary>
     /// Жесткая синхронизация.
     /// </summary>
-    public class HardSyncController : IHardSyncController
+    public class HardSyncController : ISyncController
     {
         /// <summary>
         /// Конструктор.
@@ -28,7 +28,12 @@ namespace SecurityDatabaseSync.BLL.Implementations
 
                 for (int i = 0; i < 10; i++)
                 {
-                    data.Add(new TestModel { Name = identifier + Guid.NewGuid().ToString() });
+                    data.Add(new TestModel
+                    {
+                        Code = identifier + Guid.NewGuid().ToString(),
+                        Name = Guid.NewGuid().ToString().Substring(0, 8),
+                        Current = DateTime.Now
+                    });
                 }
 
                 await db.TestModelTable.AddRangeAsync(data);
@@ -66,7 +71,7 @@ namespace SecurityDatabaseSync.BLL.Implementations
                 {
                     foreach (var item in client)
                     {
-                        if (item.Name.StartsWith(identifier))
+                        if (item.Code.StartsWith(identifier))
                         {
                             db.TestModelTable.Remove(item);
                         }
@@ -86,7 +91,7 @@ namespace SecurityDatabaseSync.BLL.Implementations
             using (ApplicationContext db = new ApplicationContext(dbFirst))
             {
                 dataFirst = await db.TestModelTable.Select(record => record)
-                                                   .Where(r => r.Name.StartsWith(identifier))
+                                                   .Where(r => r.Code.StartsWith(identifier))
                                                    .ToListAsync();
 
                 Console.WriteLine("> Данные успешно считаны!");
@@ -96,7 +101,12 @@ namespace SecurityDatabaseSync.BLL.Implementations
             {
                 foreach (var item in dataFirst)
                 {
-                    dataSecond.Add(new TestModel { Name = item.Name });
+                    dataSecond.Add(new TestModel
+                    {
+                        Code = item.Code,
+                        Name = item.Name,
+                        Current = item.Current
+                    });
                 }
 
                 await db.TestModelTable.AddRangeAsync(dataSecond);

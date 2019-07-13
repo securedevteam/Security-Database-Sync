@@ -5,7 +5,7 @@ namespace SecurityDatabaseSync.BLL.Interfaces
     /// <summary>
     /// Интерфейс для жесткой синхронизации.
     /// </summary>
-    public interface IHardSyncController
+    public interface ISyncController
     {
         /// <summary>
         /// Добавить данные в конкретную базу данных.

@@ -87,6 +87,12 @@ namespace SecurityDatabaseSync.UI.ConsoleApp.Implemetations
                         }
                         break;
 
+                    case "exit":
+                        {
+                            Console.WriteLine();
+                            return;
+                        }
+
                     default:
                         {
                             Console.WriteLine(">> Введена неверная команда!\n");

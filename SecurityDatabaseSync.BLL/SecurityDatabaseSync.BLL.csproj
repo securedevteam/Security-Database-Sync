@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SecurityDatabaseSync.Core\SecurityDatabaseSync.Core.csproj" />
     <ProjectReference Include="..\SecurityDatabaseSync.DAL\SecurityDatabaseSync.DAL.csproj" />
   </ItemGroup>
 

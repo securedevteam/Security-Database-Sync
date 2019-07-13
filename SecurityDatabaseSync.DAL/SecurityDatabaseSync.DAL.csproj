@@ -12,4 +12,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SecurityDatabaseSync.Core\SecurityDatabaseSync.Core.csproj" />
+  </ItemGroup>
+
 </Project>

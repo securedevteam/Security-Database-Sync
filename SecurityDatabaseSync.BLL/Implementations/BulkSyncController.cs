@@ -9,71 +9,76 @@ using System.Threading.Tasks;
 
 namespace SecurityDatabaseSync.BLL.Implementations
 {
-    public class SyncController : IBulkSyncController
-    {
-        private readonly ApplicationContextClient _clientContext;
-        private readonly ApplicationContextServer _serverContext;
-        private readonly int _clientNumber;
+    //public class BulkSyncController 
+    //    //: IBulkSyncController
+    //{
+    //    private readonly ApplicationContextClient _clientContext;
+    //    private readonly ApplicationContextServer _serverContext;
+    //    private readonly int _clientNumber;
 
-        public SyncController(ApplicationContextClient client, ApplicationContextServer server)
-        {
-            _clientContext = client ?? throw new ArgumentNullException(nameof(client));
-            _serverContext = server ?? throw new ArgumentNullException(nameof(server));
-        }
+    //    public BulkSyncController(ApplicationContextClient client, ApplicationContextServer server)
+    //    {
+    //        _clientContext = client ?? throw new ArgumentNullException(nameof(client));
+    //        _serverContext = server ?? throw new ArgumentNullException(nameof(server));
+    //    }
 
-        public SyncController(ApplicationContextClient client, ApplicationContextServer server, int clientNumber)
-        {
-            _clientContext = client ?? throw new ArgumentNullException(nameof(client));
-            _serverContext = server ?? throw new ArgumentNullException(nameof(server));
-            _clientNumber = clientNumber;
-        }
+    //    public BulkSyncController(ApplicationContextClient client, ApplicationContextServer server, int clientNumber)
+    //    {
+    //        _clientContext = client ?? throw new ArgumentNullException(nameof(client));
+    //        _serverContext = server ?? throw new ArgumentNullException(nameof(server));
+    //        _clientNumber = clientNumber;
+    //    }
 
-        public async Task<(List<Pledge> clientTable, List<Pledge> serverTable)> GetAllDataFromDatabasesAsync()
-        {
-            var result = (clientTable: new List<Pledge>(), serverTable: new List<Pledge>());
+    //    public List<TestModel> GetAllDataFromClientDatabases()
+    //    {
+    //        var clientTable = _clientContext.TestModelTable.ToList();
 
-            result.clientTable = await _clientContext.PledgeTable.ToListAsync();
-            result.serverTable = await _serverContext.PledgeTable.ToListAsync();
+    //        return clientTable;
+    //    }
 
-            return result;
-        }
+    //    public List<TestModel> GetAllDataFromServerDatabases()
+    //    {
+    //        var serverTable = _serverContext.TestModelTable.ToList();
 
-        public List<Pledge> GetAllСonditionRecords(List<Pledge> clientTable)
-        {
-            var _selectedTableClient = clientTable.Select(record => record)
-                                                  .Where(r => r.Code == _clientNumber)
-                                                  .ToList();
-            return _selectedTableClient;
-        }
+    //        return serverTable;
+    //    }
 
-        public async Task DeleteAllDataFromClientDatabaseAsync(List<Pledge> clientTable)
-        {
-            await _clientContext.BulkDeleteAsync(clientTable);
-        }
+    //    public List<Pledge> GetAllСonditionRecords(List<Pledge> clientTable)
+    //    {
+    //        var _selectedTableClient = clientTable.Select(record => record)
+    //                                              .Where(r => r.Code == _clientNumber)
+    //                                              .ToList();
+    //        return _selectedTableClient;
+    //    }
 
-        public async Task DeleteAllDataFromServerDatabaseAsync(List<Pledge> serverTable)
-        {
-            await _serverContext.BulkDeleteAsync(serverTable);
-        }
+    //    public void DeleteAllDataFromClientDatabaseAsync(List<TestModel> clientTable)
+    //    {
+    //        _clientContext.BulkDelete(clientTable);
+    //    }
 
-        public async Task InsertAllDataToClientDatabaseAsync(List<Pledge> clientTable)
-        {
-            await _clientContext.BulkInsertAsync(clientTable);
-        }
+    //    public void DeleteAllDataFromServerDatabaseAsync(List<TestModel> serverTable)
+    //    {
+    //        _serverContext.BulkDelete(serverTable);
+    //    }
 
-        public async Task InsertAllDataToServerDatabaseAsync(List<Pledge> serverTable)
-        {
-            await _serverContext.BulkInsertAsync(serverTable);
-        }
+    //    public void InsertAllDataToClientDatabaseAsync(List<TestModel> clientTable)
+    //    {
+    //        _clientContext.BulkInsert(clientTable);
+    //    }
 
-        public async Task SaveAllDataToClientDatabaseAsync()
-        {
-            await _clientContext.BulkSaveChangesAsync();
-        }
+    //    public void InsertAllDataToServerDatabase(List<TestModel> serverTable)
+    //    {
+    //        _serverContext.BulkInsert(serverTable);
+    //    }
 
-        public async Task SaveAllDataToServerDatabaseAsync()
-        {
-            await _serverContext.BulkSaveChangesAsync();
-        }
-    }
+    //    public void SaveAllDataToClientDatabase()
+    //    {
+    //        _clientContext.BulkSaveChanges();
+    //    }
+
+    //    public void SaveAllDataToServerDatabase()
+    //    {
+    //        _serverContext.BulkSaveChanges();
+    //    }
+    //}
 }

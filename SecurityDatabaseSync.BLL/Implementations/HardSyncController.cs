@@ -41,13 +41,35 @@ namespace SecurityDatabaseSync.BLL.Implementations
         {
             using (ApplicationContext db = new ApplicationContext(databaseName))
             {
-                var client = db.TestModelTable.ToList();
+                var client = await db.TestModelTable.ToListAsync();
 
                 if (client.Count != 0)
                 {
                     foreach (var item in client)
                     {
                         db.TestModelTable.Remove(item);
+                    }
+
+                    await db.SaveChangesAsync();
+                }
+            }
+        }
+
+        /// <inheritdoc/>
+        public async Task ClearDataAsync(string databaseName, string identifier)
+        {
+            using (ApplicationContext db = new ApplicationContext(databaseName))
+            {
+                var client = await db.TestModelTable.ToListAsync();
+
+                if (client.Count != 0)
+                {
+                    foreach (var item in client)
+                    {
+                        if (item.Name.StartsWith(identifier))
+                        {
+                            db.TestModelTable.Remove(item);
+                        }
                     }
 
                     await db.SaveChangesAsync();

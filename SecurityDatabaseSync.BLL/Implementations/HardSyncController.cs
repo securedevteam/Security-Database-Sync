@@ -1,45 +1,44 @@
-﻿using SecurityDatabaseSync.DAL;
+﻿using Microsoft.EntityFrameworkCore;
+using SecurityDatabaseSync.BLL.Interfaces;
+using SecurityDatabaseSync.DAL;
 using SecurityDatabaseSync.DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SecurityDatabaseSync.BLL.Implementations
 {
-    public class HardSyncController
+    /// <summary>
+    /// Жесткая синхронизация.
+    /// </summary>
+    public class HardSyncController : IHardSyncController
     {
-        public HardSyncController()
-        {
-        }
+        /// <summary>
+        /// Конструктор.
+        /// </summary>
+        public HardSyncController() { }
 
-        public async Task InsertDataAsync()
+        /// <inheritdoc/>
+        public async Task InsertDataAsync(string databaseName, string identifier)
         {
-            Console.Write("Enter database name: ");
-            var databaseName = Console.ReadLine();
-
             using (ApplicationContext db = new ApplicationContext(databaseName))
             {
                 var data = new List<TestModel>();
 
                 for (int i = 0; i < 10; i++)
                 {
-                    data.Add(new TestModel { Name = Guid.NewGuid().ToString() });
+                    data.Add(new TestModel { Name = identifier + Guid.NewGuid().ToString() });
                 }
 
                 await db.TestModelTable.AddRangeAsync(data);
                 await db.SaveChangesAsync();
-
-                Console.WriteLine("Complete!");
             }
         }
 
-        public void ClearData()
+        /// <inheritdoc/>
+        public async Task ClearDataAsync(string databaseName)
         {
-            Console.Write("Enter database name: ");
-            var databaseName = Console.ReadLine();
-
             using (ApplicationContext db = new ApplicationContext(databaseName))
             {
                 var client = db.TestModelTable.ToList();
@@ -51,23 +50,24 @@ namespace SecurityDatabaseSync.BLL.Implementations
                         db.TestModelTable.Remove(item);
                     }
 
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
                 }
-
-                Console.WriteLine("Complete!");
             }
         }
 
-        public void CopyData(string dbFirst, string dbSecond)
+        /// <inheritdoc/>
+        public async Task CopyDataAsync(string dbFirst, string dbSecond, string identifier)
         {
             var dataFirst = new List<TestModel>();
             var dataSecond = new List<TestModel>();
 
             using (ApplicationContext db = new ApplicationContext(dbFirst))
             {
-                dataFirst = db.TestModelTable.ToList();
+                dataFirst = await db.TestModelTable.Select(record => record)
+                                                   .Where(r => r.Name.StartsWith(identifier))
+                                                   .ToListAsync();
 
-                Console.WriteLine("ToList!");
+                Console.WriteLine("> Данные успешно считаны!");
             }
 
             using (ApplicationContext db = new ApplicationContext(dbSecond))
@@ -77,10 +77,8 @@ namespace SecurityDatabaseSync.BLL.Implementations
                     dataSecond.Add(new TestModel { Name = item.Name });
                 }
 
-                db.TestModelTable.AddRange(dataSecond);
-                db.SaveChanges();
-
-                Console.WriteLine("Complete!");
+                await db.TestModelTable.AddRangeAsync(dataSecond);
+                await db.SaveChangesAsync();
             }
         }
     }

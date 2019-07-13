@@ -1,9 +1,5 @@
 ﻿using SecurityDatabaseSync.BLL.Implementations;
-using SecurityDatabaseSync.DAL;
-using SecurityDatabaseSync.DAL.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SecurityDatabaseSync.UI.ConsoleApp
@@ -17,38 +13,54 @@ namespace SecurityDatabaseSync.UI.ConsoleApp
 
             while (true)
             {
-                Console.Write("Enter param: ");
+                Console.Write("Введите действие: ");
                 var param = Console.ReadLine();
 
                 switch(param)
                 {
                     case "db-i":
                         {
-                            await hardSync.InsertDataAsync();
+                            Console.WriteLine();
+
+                            Console.Write("Введите название базы данных: ");
+                            var databaseName = Console.ReadLine();
+
+                            Console.Write("Введите идентификатор: ");
+                            var identifier = Console.ReadLine();
+
+                            await hardSync.InsertDataAsync(databaseName, identifier);
+
+                            Console.WriteLine(">> Операция выполнена!\n");
                         }
                         break;
 
-                    case "db-c-u":
+                    case "db-ei":
                         {
-                            Console.Write("Enter database name: ");
-                            var databaseName = Console.ReadLine();
+                            Console.Write("Введите название базы данных для экспорта: ");
+                            var dbFirst = Console.ReadLine();
 
-                            hardSync.CopyData("cs1", databaseName);
-                        }
-                        break;
+                            Console.Write("Введите название базы данных для импорта: ");
+                            var dbSecond = Console.ReadLine();
 
-                    case "db-s-i":
-                        {
-                            Console.Write("Enter database name: ");
-                            var databaseName = Console.ReadLine();
+                            Console.Write("Введите идентификатор: ");
+                            var identifier = Console.ReadLine();
 
-                            hardSync.CopyData(databaseName, "cs1");
+                            await hardSync.CopyDataAsync(dbFirst, dbSecond, identifier);
+
+                            Console.WriteLine(">> Операция выполнена!\n");
                         }
                         break;
 
                     case "db-c":
                         {
-                            hardSync.ClearData();
+                            Console.WriteLine();
+
+                            Console.Write("Введите название базы данных: ");
+                            var databaseName = Console.ReadLine();
+
+                            await hardSync.ClearDataAsync(databaseName);
+
+                            Console.WriteLine(">> Операция выполнена!\n");
                         }
                         break;
 

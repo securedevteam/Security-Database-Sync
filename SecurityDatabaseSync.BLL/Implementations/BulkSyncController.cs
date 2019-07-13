@@ -6,79 +6,107 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Z.EntityFramework.Extensions;
 
 namespace SecurityDatabaseSync.BLL.Implementations
 {
-    //public class BulkSyncController 
-    //    //: IBulkSyncController
-    //{
-    //    private readonly ApplicationContextClient _clientContext;
-    //    private readonly ApplicationContextServer _serverContext;
-    //    private readonly int _clientNumber;
+    /// <summary>
+    /// Bulk синхронизация.
+    /// </summary>
+    public class BulkSyncController : ISyncController
+    {
+        /// <summary>
+        /// Конструктор.
+        /// </summary>
+        public BulkSyncController() { }
 
-    //    public BulkSyncController(ApplicationContextClient client, ApplicationContextServer server)
-    //    {
-    //        _clientContext = client ?? throw new ArgumentNullException(nameof(client));
-    //        _serverContext = server ?? throw new ArgumentNullException(nameof(server));
-    //    }
+        /// <inheritdoc/>
+        public async Task InsertDataAsync(string databaseName, string identifier)
+        {
+            EntityFrameworkManager.ContextFactory = db => new ApplicationContext(databaseName);
 
-    //    public BulkSyncController(ApplicationContextClient client, ApplicationContextServer server, int clientNumber)
-    //    {
-    //        _clientContext = client ?? throw new ArgumentNullException(nameof(client));
-    //        _serverContext = server ?? throw new ArgumentNullException(nameof(server));
-    //        _clientNumber = clientNumber;
-    //    }
+            using (var db = new ApplicationContext(databaseName))
+            {
+                var data = new List<TestModel>();
 
-    //    public List<TestModel> GetAllDataFromClientDatabases()
-    //    {
-    //        var clientTable = _clientContext.TestModelTable.ToList();
+                for (int i = 0; i < 10000; i++)
+                {
+                    data.Add(new TestModel
+                    {
+                        Code = identifier + Guid.NewGuid().ToString(),
+                        Name = Guid.NewGuid().ToString().Substring(0, 8),
+                        Current = DateTime.Now
+                    });
+                }
 
-    //        return clientTable;
-    //    }
+                await db.BulkInsertAsync(data);
+            }
+        }
 
-    //    public List<TestModel> GetAllDataFromServerDatabases()
-    //    {
-    //        var serverTable = _serverContext.TestModelTable.ToList();
+        /// <inheritdoc/>
+        public async Task ClearDataAsync(string databaseName)
+        {
+            EntityFrameworkManager.ContextFactory = db => new ApplicationContext(databaseName);
 
-    //        return serverTable;
-    //    }
+            using (ApplicationContext db = new ApplicationContext(databaseName))
+            {
+                var data = await db.TestModelTable.ToListAsync();
 
-    //    public List<Pledge> GetAllСonditionRecords(List<Pledge> clientTable)
-    //    {
-    //        var _selectedTableClient = clientTable.Select(record => record)
-    //                                              .Where(r => r.Code == _clientNumber)
-    //                                              .ToList();
-    //        return _selectedTableClient;
-    //    }
+                if (data.Count != 0)
+                {
+                    await db.BulkDeleteAsync(data);
+                }
+            }
+        }
 
-    //    public void DeleteAllDataFromClientDatabaseAsync(List<TestModel> clientTable)
-    //    {
-    //        _clientContext.BulkDelete(clientTable);
-    //    }
+        /// <inheritdoc/>
+        public async Task ClearDataAsync(string databaseName, string identifier)
+        {
+            EntityFrameworkManager.ContextFactory = db => new ApplicationContext(databaseName);
 
-    //    public void DeleteAllDataFromServerDatabaseAsync(List<TestModel> serverTable)
-    //    {
-    //        _serverContext.BulkDelete(serverTable);
-    //    }
+            using (ApplicationContext db = new ApplicationContext(databaseName))
+            {
+                var data = await db.TestModelTable.Where(p => p.Code.StartsWith(identifier))
+                                                  .ToListAsync();
 
-    //    public void InsertAllDataToClientDatabaseAsync(List<TestModel> clientTable)
-    //    {
-    //        _clientContext.BulkInsert(clientTable);
-    //    }
+                if (data.Count != 0)
+                {
+                    await db.BulkDeleteAsync(data);
+                }
+            }
+        }
 
-    //    public void InsertAllDataToServerDatabase(List<TestModel> serverTable)
-    //    {
-    //        _serverContext.BulkInsert(serverTable);
-    //    }
+        /// <inheritdoc/>
+        public async Task CopyDataAsync(string dbFirst, string dbSecond, string identifier)
+        {
+            var dataFirst = new List<TestModel>();
+            var dataSecond = new List<TestModel>();
 
-    //    public void SaveAllDataToClientDatabase()
-    //    {
-    //        _clientContext.BulkSaveChanges();
-    //    }
+            using (ApplicationContext db = new ApplicationContext(dbFirst))
+            {
+                dataFirst = await db.TestModelTable.Select(record => record)
+                                                   .Where(r => r.Code.StartsWith(identifier))
+                                                   .ToListAsync();
 
-    //    public void SaveAllDataToServerDatabase()
-    //    {
-    //        _serverContext.BulkSaveChanges();
-    //    }
-    //}
+                Console.WriteLine("> Данные успешно считаны!");
+            }
+
+            EntityFrameworkManager.ContextFactory = db => new ApplicationContext(dbSecond);
+
+            using (ApplicationContext db = new ApplicationContext(dbSecond))
+            {
+                foreach (var item in dataFirst)
+                {
+                    dataSecond.Add(new TestModel
+                    {
+                        Code = item.Code,
+                        Name = item.Name,
+                        Current = item.Current
+                    });
+                }
+
+                await db.BulkInsertAsync(dataSecond);
+            }
+        }
+    }
 }

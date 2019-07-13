@@ -26,7 +26,7 @@ namespace SecurityDatabaseSync.BLL.Implementations
             {
                 var data = new List<TestModel>();
 
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < 10000; i++)
                 {
                     data.Add(new TestModel
                     {
@@ -46,11 +46,11 @@ namespace SecurityDatabaseSync.BLL.Implementations
         {
             using (ApplicationContext db = new ApplicationContext(databaseName))
             {
-                var client = await db.TestModelTable.ToListAsync();
+                var data = await db.TestModelTable.ToListAsync();
 
-                if (client.Count != 0)
+                if (data.Count != 0)
                 {
-                    foreach (var item in client)
+                    foreach (var item in data)
                     {
                         db.TestModelTable.Remove(item);
                     }
@@ -65,11 +65,11 @@ namespace SecurityDatabaseSync.BLL.Implementations
         {
             using (ApplicationContext db = new ApplicationContext(databaseName))
             {
-                var client = await db.TestModelTable.ToListAsync();
+                var data = await db.TestModelTable.ToListAsync();
 
-                if (client.Count != 0)
+                if (data.Count != 0)
                 {
-                    foreach (var item in client)
+                    foreach (var item in data)
                     {
                         if (item.Code.StartsWith(identifier))
                         {

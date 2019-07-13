@@ -1,4 +1,6 @@
-﻿using SecurityDatabaseSync.UI.ConsoleApp.Implemetations;
+﻿using SecurityDatabaseSync.BLL.Implementations;
+using SecurityDatabaseSync.BLL.Interfaces;
+using SecurityDatabaseSync.UI.ConsoleApp.Implementations;
 using SecurityDatabaseSync.UI.ConsoleApp.Interfaces;
 using System;
 using System.Threading.Tasks;
@@ -9,35 +11,41 @@ namespace SecurityDatabaseSync.UI.ConsoleApp
     {
         public static async Task Main(string[] args)
         {
-            ISyncStart sync = new HardSync();
+            ISyncController hardController = new HardSyncController();
+            ISyncController bulkController = new BulkSyncController();
+
+            ISyncStart hard = new HardSynchronization(hardController);
+            ISyncStart bulk = new HardSynchronization(bulkController);
 
             while (true)
             {
+                Console.WriteLine("-hard, -bulk, -default, -quit");
                 Console.Write("Введите тип синхронизации: ");
                 var param = Console.ReadLine();
 
                 switch(param)
                 {
-                    case "hard":
+                    case "-hard":
                         {
                             Console.WriteLine();
-                            await sync.SyncStart();
+                            await hard.SyncStart();
                         }
                         break;
 
-                    case "bulk":
+                    case "-bulk":
+                        {
+                            Console.WriteLine();
+                            await bulk.SyncStart();
+                        }
+                        break;
+
+                    case "-default":
                         {
                             // TODO: Реализовать данный тип
                         }
                         break;
 
-                    case "default":
-                        {
-                            // TODO: Реализовать данный тип
-                        }
-                        break;
-
-                    case "exit":
+                    case "-quit":
                         {
                             return;
                         }

@@ -1,13 +1,12 @@
-﻿using SecurityDatabaseSync.DAL;
+﻿using SecurityDatabaseSync.BLL.Interfaces;
+using SecurityDatabaseSync.DAL;
 using SecurityDatabaseSync.DAL.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace SecurityDatabaseSync.BLL.Implementations
 {
-    public class DefaultSyncController
+    public class DefaultSyncController : IDefaultSyncController
     {
         public DefaultSyncController() { }
 
@@ -55,7 +54,7 @@ namespace SecurityDatabaseSync.BLL.Implementations
                 foreach (var item in exceptCodes)
                 {
                     var model = firstData.Where(d => d.Code == item)
-                                          .FirstOrDefault();
+                                         .FirstOrDefault();
 
                     if (model != null)
                     {

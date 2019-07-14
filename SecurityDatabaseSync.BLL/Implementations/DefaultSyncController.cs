@@ -30,7 +30,7 @@ namespace SecurityDatabaseSync.BLL.Implementations
         }
 
         /// <inheritdoc/>
-        public async Task<List<TestModel>> GetDataWithFilterFromDatabaseAsync(string databaseName, string identifier)
+        public async Task<List<TestModel>> GetDataFromDatabaseAsync(string databaseName, string identifier)
         {
             using (ApplicationContext db = new ApplicationContext(databaseName))
             {
@@ -40,6 +40,7 @@ namespace SecurityDatabaseSync.BLL.Implementations
                 return result;
             }
         }
+
 
         // Пункт 1.1 Если в отделении нет записи из этого отделения, то удалить ее и на сервере
         // Пункт 1.2 Если на сервере нет записей других отделений, то удалить их и в отделении
@@ -98,6 +99,46 @@ namespace SecurityDatabaseSync.BLL.Implementations
             return false;
         }
 
+
         // Пункт 1.3  Если на сервере и оделении записи различаются по UpdateDate, то выполнить Update записи с меньшей датой
+
+        /// <inheritdoc/>
+        public async Task<bool> UpdateDataToServerAsync(List<TestModel> firstData, List<TestModel> secondData, string databaseName)
+        {
+            var exceptData = new List<TestModel>();
+
+            foreach (var fd_item in firstData)
+            {
+                foreach (var sd_item in secondData)
+                {
+                    if (fd_item.Code == sd_item.Code)
+                    {
+                        if (fd_item.Current > sd_item.Current)
+                        {
+                            exceptData.Add(new TestModel
+                            {
+                                Code = fd_item.Code,
+                                Name = fd_item.Name,
+                                Current = fd_item.Current
+                            });
+                        }
+                    }
+                }
+            }
+
+            if (exceptData.Count != 0)
+            {
+                using (ApplicationContext db = new ApplicationContext(databaseName))
+                {
+                    db.TestModelTable.UpdateRange(exceptData);
+
+                    await db.SaveChangesAsync();
+                }
+
+                return true;
+            }
+
+            return false;
+        } 
     }
 }

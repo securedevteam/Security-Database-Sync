@@ -22,7 +22,7 @@ namespace SecurityDatabaseSync.BLL.Interfaces
         /// <param name="databaseName">название базы данных.</param>
         /// <param name="identifier">условие выборки (идентификатор).</param>
         /// <returns>Список полученных моделей.</returns>
-        Task<List<TestModel>> GetDataWithFilterFromDatabaseAsync(string databaseName, string identifier);
+        Task<List<TestModel>> GetDataFromDatabaseAsync(string databaseName, string identifier);
 
         /// <summary>
         /// Добавить или удалить данные из базы данных.
@@ -33,5 +33,14 @@ namespace SecurityDatabaseSync.BLL.Interfaces
         /// <param name="databaseName">название базы данных.</param>
         /// <returns>Результат операции.</returns>
         Task<bool> AddOrDeleteDataToDatabaseAsync(List<TestModel> firstData, List<TestModel> secondData, bool remove, string databaseName);
+
+        /// <summary>
+        /// Обновить данные на сервере.
+        /// </summary>
+        /// <param name="firstData">первый список моделей.</param>
+        /// <param name="secondData">второй список моделей.</param>
+        /// <param name="databaseName">название базы данных.</param>
+        /// <returns>Результат операции.</returns>
+        Task<bool> UpdateDataToServerAsync(List<TestModel> firstData, List<TestModel> secondData, string databaseName);
     }
 }

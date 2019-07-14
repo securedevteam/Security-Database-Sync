@@ -17,6 +17,8 @@ namespace SecurityDatabaseSync.UI.ConsoleApp
             ISyncStart hard = new HardSynchronization(hardController);
             ISyncStart bulk = new HardSynchronization(bulkController);
 
+            IDefaultSyncController defs = new DefaultSyncController();
+
             while (true)
             {
                 Console.WriteLine("-hard, -bulk, -default, -quit");
@@ -41,6 +43,17 @@ namespace SecurityDatabaseSync.UI.ConsoleApp
 
                     case "-default":
                         {
+                            //var c1 = await defs.GetDataFromDatabaseAsync("dbc1", "db1_");
+                            //var s1 = await defs.GetDataFromDatabaseAsync("dbs1", "db1_");
+
+                            //var t = await defs.AddOrDeleteDataToDatabaseAsync(c1, s1, false, "dbs1");
+
+                            //var c11 = await defs.GetDataFromDatabaseAsync("dbc1", "db1_");
+                            //var s11 = await defs.GetDataFromDatabaseAsync("dbs1", "db1_");
+
+                            //var tt = await defs.UpdateDataToServerAsync(c11, s11, "dbs1");
+
+
                             // TODO: Реализовать данный тип
                         }
                         break;

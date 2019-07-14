@@ -1,8 +1,10 @@
-﻿using SecurityDatabaseSync.BLL.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using SecurityDatabaseSync.BLL.Interfaces;
 using SecurityDatabaseSync.DAL;
 using SecurityDatabaseSync.DAL.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SecurityDatabaseSync.BLL.Implementations
 {
@@ -17,23 +19,23 @@ namespace SecurityDatabaseSync.BLL.Implementations
         public DefaultSyncController() { }
 
         /// <inheritdoc/>
-        public List<TestModel> GetDataFromDatabase(string databaseName)
+        public async Task<List<TestModel>> GetDataFromDatabaseAsync(string databaseName)
         {
             using (ApplicationContext db = new ApplicationContext(databaseName))
             {
-                var result = db.TestModelTable.ToList();
+                var result = await db.TestModelTable.ToListAsync();
 
                 return result;
             }
         }
 
         /// <inheritdoc/>
-        public List<TestModel> GetDataWithFilterFromDatabase(string databaseName, string identifier)
+        public async Task<List<TestModel>> GetDataWithFilterFromDatabaseAsync(string databaseName, string identifier)
         {
             using (ApplicationContext db = new ApplicationContext(databaseName))
             {
-                var result = db.TestModelTable.Where(r => r.Code.StartsWith(identifier))
-                                              .ToList();
+                var result = await db.TestModelTable.Where(r => r.Code.StartsWith(identifier))
+                                              .ToListAsync();
 
                 return result;
             }
@@ -45,7 +47,7 @@ namespace SecurityDatabaseSync.BLL.Implementations
         // Пункт 1.5 Добавить в отделение недостающие записи
 
         /// <inheritdoc/>
-        public bool AddOrDeleteDataToDatabase(List<TestModel> firstData, List<TestModel> secondData, bool remove, string databaseName)
+        public async Task<bool> AddOrDeleteDataToDatabaseAsync(List<TestModel> firstData, List<TestModel> secondData, bool remove, string databaseName)
         {
             var firstCodes = firstData.Select(d => d.Code)
                                       .ToList();
@@ -84,10 +86,10 @@ namespace SecurityDatabaseSync.BLL.Implementations
                     }
                     else
                     {
-                        db.TestModelTable.AddRange(exceptData);
+                        await db.TestModelTable.AddRangeAsync(exceptData);
                     }
 
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
                 }
 
                 return true;

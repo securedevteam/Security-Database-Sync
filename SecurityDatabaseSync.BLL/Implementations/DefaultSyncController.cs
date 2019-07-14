@@ -6,10 +6,17 @@ using System.Linq;
 
 namespace SecurityDatabaseSync.BLL.Implementations
 {
+    /// <summary>
+    /// Класс классической синхронизации базы данных.
+    /// </summary>
     public class DefaultSyncController : IDefaultSyncController
     {
+        /// <summary>
+        /// Конструктор.
+        /// </summary>
         public DefaultSyncController() { }
 
+        /// <inheritdoc/>
         public List<TestModel> GetDataFromDatabase(string databaseName)
         {
             using (ApplicationContext db = new ApplicationContext(databaseName))
@@ -20,6 +27,7 @@ namespace SecurityDatabaseSync.BLL.Implementations
             }
         }
 
+        /// <inheritdoc/>
         public List<TestModel> GetDataWithFilterFromDatabase(string databaseName, string identifier)
         {
             using (ApplicationContext db = new ApplicationContext(databaseName))
@@ -36,6 +44,7 @@ namespace SecurityDatabaseSync.BLL.Implementations
         // Пункт 1.4 Добавить на сервер недостающие записи
         // Пункт 1.5 Добавить в отделение недостающие записи
 
+        /// <inheritdoc/>
         public bool AddOrDeleteDataToDatabase(List<TestModel> firstData, List<TestModel> secondData, bool remove, string databaseName)
         {
             var firstCodes = firstData.Select(d => d.Code)

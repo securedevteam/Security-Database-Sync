@@ -13,15 +13,15 @@ namespace SecurityDatabaseSync.UI.ConsoleApp
         {
             ISyncController hardController = new HardSyncController();
             ISyncController bulkController = new BulkSyncController();
+            IDefaultSyncController defController = new DefaultSyncController();
 
             ISyncStart hard = new HardSynchronization(hardController);
             ISyncStart bulk = new HardSynchronization(bulkController);
-
-            IDefaultSyncController defs = new DefaultSyncController();
-
+            ISyncStart def = new DefaultSynchronization(defController);
+            
             while (true)
             {
-                Console.WriteLine("-hard, -bulk, -default, -quit");
+                Console.WriteLine("-hard, -hard-bulk, -default, -default-bulk, -quit");
                 Console.Write("Введите тип синхронизации: ");
                 var param = Console.ReadLine();
 
@@ -34,7 +34,7 @@ namespace SecurityDatabaseSync.UI.ConsoleApp
                         }
                         break;
 
-                    case "-bulk":
+                    case "-hard-bulk":
                         {
                             Console.WriteLine();
                             await bulk.SyncStart();
@@ -43,18 +43,14 @@ namespace SecurityDatabaseSync.UI.ConsoleApp
 
                     case "-default":
                         {
-                            //var c1 = await defs.GetDataFromDatabaseAsync("dbc1", "db1_");
-                            //var s1 = await defs.GetDataFromDatabaseAsync("dbs1", "db1_");
+                            Console.WriteLine();
+                            await def.SyncStart();
+                        }
+                        break;
 
-                            //var t = await defs.AddOrDeleteDataToDatabaseAsync(c1, s1, false, "dbs1");
-
-                            //var c11 = await defs.GetDataFromDatabaseAsync("dbc1", "db1_");
-                            //var s11 = await defs.GetDataFromDatabaseAsync("dbs1", "db1_");
-
-                            //var tt = await defs.UpdateDataToServerAsync(c11, s11, "dbs1");
-
-
-                            // TODO: Реализовать данный тип
+                    case "-default-bulk":
+                        {
+                            // TODO: Реализовать через Bulk
                         }
                         break;
 

@@ -1,6 +1,8 @@
 ﻿using SecurityDatabaseSync.BLL.Interfaces;
+using SecurityDatabaseSync.DAL.Models;
 using SecurityDatabaseSync.UI.ConsoleApp.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SecurityDatabaseSync.UI.ConsoleApp.Implementations
@@ -37,76 +39,31 @@ namespace SecurityDatabaseSync.UI.ConsoleApp.Implementations
                 {
                     case "-add":
                         {
-                            Console.WriteLine();
-
-                            Console.Write("Введите название базы данных клиента: ");
-                            var clientDatabaseName = Console.ReadLine();
-
-                            Console.Write("Введите название базы данных сервера: ");
-                            var serverDatabaseName = Console.ReadLine();
-
-                            Console.Write("Введите идентификатор: ");
-                            var identifier = Console.ReadLine();
-
-                            Console.Write("Введите название целевой базы данных: ");
-                            var targetDatabaseName = Console.ReadLine();
-
-                            var client = await _defaultSyncController.GetDataFromDatabaseAsync(clientDatabaseName, identifier);
-                            var server = await _defaultSyncController.GetDataFromDatabaseAsync(serverDatabaseName, identifier);
+                            var (client, server, targetDatabaseName) = await FillInitialData();
 
                             var resultAdd = await _defaultSyncController.AddOrDeleteDataToDatabaseAsync(client, server, false, targetDatabaseName);
 
-                            Console.WriteLine(">> Операция выполнена!\n");
+                            OperationResult(resultAdd);
                         }
                         break;
 
                     case "-delete":
                         {
-                            Console.WriteLine();
+                            var (client, server, targetDatabaseName) = await FillInitialData();
 
-                            Console.Write("Введите название базы данных клиента: ");
-                            var clientDatabaseName = Console.ReadLine();
+                            var resultDelete = await _defaultSyncController.AddOrDeleteDataToDatabaseAsync(server, client, true, targetDatabaseName);
 
-                            Console.Write("Введите название базы данных сервера: ");
-                            var serverDatabaseName = Console.ReadLine();
-
-                            Console.Write("Введите идентификатор: ");
-                            var identifier = Console.ReadLine();
-
-                            Console.Write("Введите название целевой базы данных: ");
-                            var targetDatabaseName = Console.ReadLine();
-
-                            var client = await _defaultSyncController.GetDataFromDatabaseAsync(clientDatabaseName, identifier);
-                            var server = await _defaultSyncController.GetDataFromDatabaseAsync(serverDatabaseName, identifier);
-
-                            var resultDelete = _defaultSyncController.AddOrDeleteDataToDatabaseAsync(server, client, true, targetDatabaseName);
-
-                            Console.WriteLine(">> Операция выполнена!\n");
+                            OperationResult(resultDelete);
                         }
                         break;
 
                     case "-update":
                         {
-                            Console.WriteLine();
+                            var (client, server, targetDatabaseName) = await FillInitialData();
 
-                            Console.Write("Введите название базы данных клиента: ");
-                            var clientDatabaseName = Console.ReadLine();
+                            var resultUpdate = await _defaultSyncController.UpdateDataToServerAsync(client, server, targetDatabaseName);
 
-                            Console.Write("Введите название базы данных сервера: ");
-                            var serverDatabaseName = Console.ReadLine();
-
-                            Console.Write("Введите идентификатор: ");
-                            var identifier = Console.ReadLine();
-
-                            Console.Write("Введите название целевой базы данных: ");
-                            var targetDatabaseName = Console.ReadLine();
-
-                            var client = await _defaultSyncController.GetDataFromDatabaseAsync(clientDatabaseName, identifier);
-                            var server = await _defaultSyncController.GetDataFromDatabaseAsync(serverDatabaseName, identifier);
-
-                            var resultUpdate = _defaultSyncController.UpdateDataToServerAsync(client, server, targetDatabaseName);
-
-                            Console.WriteLine(">> Операция выполнена!\n");
+                            OperationResult(resultUpdate);
                         }
                         break;
 
@@ -123,6 +80,37 @@ namespace SecurityDatabaseSync.UI.ConsoleApp.Implementations
                         break;
                 }
             }
+        }
+
+        private async Task<(List<TestModel>, List<TestModel>, string)> FillInitialData()
+        {
+            var result = (client: new List<TestModel>(), server: new List<TestModel>(), targetDatabaseName: string.Empty);
+
+            Console.WriteLine();
+
+            Console.Write("Введите название базы данных для экспорта: ");
+            var clientDatabaseName = Console.ReadLine();
+
+            Console.Write("Введите название базы данных для импорта: ");
+            var serverDatabaseName = Console.ReadLine();
+
+            Console.Write("Введите идентификатор: ");
+            var identifier = Console.ReadLine();
+
+            Console.Write("Введите название целевой базы данных: ");
+            result.targetDatabaseName = Console.ReadLine();
+
+            result.client = await _defaultSyncController.GetDataFromDatabaseAsync(clientDatabaseName, identifier);
+            result.server = await _defaultSyncController.GetDataFromDatabaseAsync(serverDatabaseName, identifier);
+
+            return result;
+        }
+
+        private void OperationResult(bool result)
+        {
+            // TODO: Доделать в зависимости от результата.
+
+            Console.WriteLine(">> Операция выполнена!\n");
         }
     }
 }

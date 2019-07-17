@@ -13,12 +13,12 @@ namespace SecurityDatabaseSync.BLL.Implementations
     /// <summary>
     /// Bulk синхронизация.
     /// </summary>
-    public class BulkSyncController : ISyncController
+    public class BulkHardSyncController : ISyncController
     {
         /// <summary>
         /// Конструктор.
         /// </summary>
-        public BulkSyncController() { }
+        public BulkHardSyncController() { }
 
         /// <inheritdoc/>
         public async Task InsertDataAsync(string databaseName, string identifier)

@@ -11,12 +11,12 @@ namespace SecurityDatabaseSync.UI.ConsoleApp
     {
         public static async Task Main(string[] args)
         {
-            ISyncController hardController = new HardSyncController();
-            ISyncController bulkController = new BulkSyncController();
+            ISyncController hController = new HardSyncController();
+            ISyncController bhController = new BulkHardSyncController();
             IDefaultSyncController defController = new DefaultSyncController();
 
-            ISyncStart hard = new HardSynchronization(hardController);
-            ISyncStart bulk = new HardSynchronization(bulkController);
+            ISyncStart hard = new HardSynchronization(hController);
+            ISyncStart bulkhard = new HardSynchronization(bhController);
             ISyncStart def = new DefaultSynchronization(defController);
             
             while (true)
@@ -37,7 +37,7 @@ namespace SecurityDatabaseSync.UI.ConsoleApp
                     case "-hard-bulk":
                         {
                             Console.WriteLine();
-                            await bulk.SyncStart();
+                            await bulkhard.SyncStart();
                         }
                         break;
 

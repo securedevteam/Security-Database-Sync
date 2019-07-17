@@ -13,12 +13,14 @@ namespace SecurityDatabaseSync.UI.ConsoleApp
         {
             ISyncController hController = new HardSyncController();
             ISyncController bhController = new BulkHardSyncController();
-            IDefaultSyncController defController = new DefaultSyncController();
+            IDefaultSyncController dController = new DefaultSyncController();
+            IDefaultSyncController bdController = new BulkDefaultSyncController();
 
             ISyncStart hard = new HardSynchronization(hController);
             ISyncStart bulkhard = new HardSynchronization(bhController);
-            ISyncStart def = new DefaultSynchronization(defController);
-            
+            ISyncStart def = new DefaultSynchronization(dController);
+            ISyncStart bulkdef = new DefaultSynchronization(bdController);
+
             while (true)
             {
                 Console.WriteLine("-hard, -hard-bulk, -default, -default-bulk, -quit");
@@ -50,7 +52,8 @@ namespace SecurityDatabaseSync.UI.ConsoleApp
 
                     case "-default-bulk":
                         {
-                            // TODO: Реализовать через Bulk
+                            Console.WriteLine();
+                            await bulkdef.SyncStart();
                         }
                         break;
 

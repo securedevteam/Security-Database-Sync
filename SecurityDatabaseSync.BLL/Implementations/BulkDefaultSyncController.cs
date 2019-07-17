@@ -5,6 +5,7 @@ using SecurityDatabaseSync.DAL.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Z.EntityFramework.Extensions;
 
 namespace SecurityDatabaseSync.BLL.Implementations
 {
@@ -79,6 +80,8 @@ namespace SecurityDatabaseSync.BLL.Implementations
                     }
                 }
 
+                EntityFrameworkManager.ContextFactory = db => new ApplicationContext(databaseName);
+
                 using (ApplicationContext db = new ApplicationContext(databaseName))
                 {
                     if (remove)
@@ -128,6 +131,8 @@ namespace SecurityDatabaseSync.BLL.Implementations
 
             if (exceptData.Count != 0)
             {
+                EntityFrameworkManager.ContextFactory = db => new ApplicationContext(databaseName);
+
                 using (ApplicationContext db = new ApplicationContext(databaseName))
                 {
                     await db.BulkUpdateAsync(exceptData);

@@ -90,8 +90,7 @@ namespace SecurityDatabaseSync.BLL.Implementations
 
             using (ApplicationContext db = new ApplicationContext(dbFirst))
             {
-                dataFirst = await db.TestModelTable.Select(record => record)
-                                                   .Where(r => r.Code.StartsWith(identifier))
+                dataFirst = await db.TestModelTable.Where(r => r.Code.StartsWith(identifier))
                                                    .ToListAsync();
 
                 Console.WriteLine("> Данные успешно считаны!");

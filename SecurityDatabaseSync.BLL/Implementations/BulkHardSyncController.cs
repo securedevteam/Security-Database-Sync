@@ -13,12 +13,12 @@ namespace SecurityDatabaseSync.BLL.Implementations
     /// <summary>
     /// Bulk синхронизация.
     /// </summary>
-    public class BulkSyncController : ISyncController
+    public class BulkHardSyncController : ISyncController
     {
         /// <summary>
         /// Конструктор.
         /// </summary>
-        public BulkSyncController() { }
+        public BulkHardSyncController() { }
 
         /// <inheritdoc/>
         public async Task InsertDataAsync(string databaseName, string identifier)
@@ -29,7 +29,7 @@ namespace SecurityDatabaseSync.BLL.Implementations
             {
                 var data = new List<TestModel>();
 
-                for (int i = 0; i < 10000; i++)
+                for (int i = 0; i < 10; i++)
                 {
                     data.Add(new TestModel
                     {

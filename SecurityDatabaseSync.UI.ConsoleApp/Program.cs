@@ -11,15 +11,19 @@ namespace SecurityDatabaseSync.UI.ConsoleApp
     {
         public static async Task Main(string[] args)
         {
-            ISyncController hardController = new HardSyncController();
-            ISyncController bulkController = new BulkSyncController();
+            ISyncController hController = new HardSyncController();
+            ISyncController bhController = new BulkHardSyncController();
+            IDefaultSyncController dController = new DefaultSyncController();
+            IDefaultSyncController bdController = new BulkDefaultSyncController();
 
-            ISyncStart hard = new HardSynchronization(hardController);
-            ISyncStart bulk = new HardSynchronization(bulkController);
+            ISyncStart hard = new HardSynchronization(hController);
+            ISyncStart bulkhard = new HardSynchronization(bhController);
+            ISyncStart def = new DefaultSynchronization(dController);
+            ISyncStart bulkdef = new DefaultSynchronization(bdController);
 
             while (true)
             {
-                Console.WriteLine("-hard, -bulk, -default, -quit");
+                Console.WriteLine("-hard, -hard-bulk, -default, -default-bulk, -quit");
                 Console.Write("Введите тип синхронизации: ");
                 var param = Console.ReadLine();
 
@@ -32,16 +36,24 @@ namespace SecurityDatabaseSync.UI.ConsoleApp
                         }
                         break;
 
-                    case "-bulk":
+                    case "-hard-bulk":
                         {
                             Console.WriteLine();
-                            await bulk.SyncStart();
+                            await bulkhard.SyncStart();
                         }
                         break;
 
                     case "-default":
                         {
-                            // TODO: Реализовать данный тип
+                            Console.WriteLine();
+                            await def.SyncStart();
+                        }
+                        break;
+
+                    case "-default-bulk":
+                        {
+                            Console.WriteLine();
+                            await bulkdef.SyncStart();
                         }
                         break;
 

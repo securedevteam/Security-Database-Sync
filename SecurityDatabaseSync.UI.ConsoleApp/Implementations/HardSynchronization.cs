@@ -1,4 +1,5 @@
 ﻿using SecurityDatabaseSync.BLL.Interfaces;
+using SecurityDatabaseSync.Core;
 using SecurityDatabaseSync.UI.ConsoleApp.Interfaces;
 using System;
 using System.Threading.Tasks;
@@ -45,9 +46,9 @@ namespace SecurityDatabaseSync.UI.ConsoleApp.Implementations
                             Console.Write("Введите идентификатор: ");
                             var identifier = Console.ReadLine();
 
-                            await _sync.InsertDataAsync(databaseName, identifier);
+                            var resultInsert = await _sync.InsertDataAsync(databaseName, identifier);
 
-                            Console.WriteLine(">> Операция выполнена!\n");
+                            StaticMethods.OperationResult(resultInsert);
                         }
                         break;
 
@@ -62,9 +63,9 @@ namespace SecurityDatabaseSync.UI.ConsoleApp.Implementations
                             Console.Write("Введите идентификатор: ");
                             var identifier = Console.ReadLine();
 
-                            await _sync.CopyDataAsync(dbFirst, dbSecond, identifier);
+                            var resultCopy = await _sync.CopyDataAsync(dbFirst, dbSecond, identifier);
 
-                            Console.WriteLine(">> Операция выполнена!\n");
+                            StaticMethods.OperationResult(resultCopy);
                         }
                         break;
 
@@ -75,9 +76,9 @@ namespace SecurityDatabaseSync.UI.ConsoleApp.Implementations
                             Console.Write("Введите название базы данных: ");
                             var databaseName = Console.ReadLine();
 
-                            await _sync.ClearDataAsync(databaseName);
+                            var resultClear = await _sync.ClearDataAsync(databaseName);
 
-                            Console.WriteLine(">> Операция выполнена!\n");
+                            StaticMethods.OperationResult(resultClear);
                         }
                         break;
 
@@ -91,9 +92,9 @@ namespace SecurityDatabaseSync.UI.ConsoleApp.Implementations
                             Console.Write("Введите идентификатор: ");
                             var identifier = Console.ReadLine();
 
-                            await _sync.ClearDataAsync(databaseName, identifier);
+                            var resultClear = await _sync.ClearDataAsync(databaseName, identifier);
 
-                            Console.WriteLine(">> Операция выполнена!\n");
+                            StaticMethods.OperationResult(resultClear);
                         }
                         break;
 

@@ -1,4 +1,5 @@
 ﻿using SecurityDatabaseSync.BLL.Interfaces;
+using SecurityDatabaseSync.Core;
 using SecurityDatabaseSync.DAL.Models;
 using SecurityDatabaseSync.UI.ConsoleApp.Interfaces;
 using System;
@@ -43,7 +44,7 @@ namespace SecurityDatabaseSync.UI.ConsoleApp.Implementations
 
                             var resultAdd = await _defaultSyncController.AddOrDeleteDataToDatabaseAsync(client, server, false, targetDatabaseName);
 
-                            OperationResult(resultAdd);
+                            StaticMethods.OperationResult(resultAdd);
                         }
                         break;
 
@@ -53,7 +54,7 @@ namespace SecurityDatabaseSync.UI.ConsoleApp.Implementations
 
                             var resultDelete = await _defaultSyncController.AddOrDeleteDataToDatabaseAsync(server, client, true, targetDatabaseName);
 
-                            OperationResult(resultDelete);
+                            StaticMethods.OperationResult(resultDelete);
                         }
                         break;
 
@@ -63,7 +64,7 @@ namespace SecurityDatabaseSync.UI.ConsoleApp.Implementations
 
                             var resultUpdate = await _defaultSyncController.UpdateDataToServerAsync(client, server, targetDatabaseName);
 
-                            OperationResult(resultUpdate);
+                            StaticMethods.OperationResult(resultUpdate);
                         }
                         break;
 
@@ -104,18 +105,6 @@ namespace SecurityDatabaseSync.UI.ConsoleApp.Implementations
             result.server = await _defaultSyncController.GetDataFromDatabaseAsync(serverDatabaseName, identifier);
 
             return result;
-        }
-
-        private void OperationResult(bool result)
-        {
-            if(result)
-            {
-                Console.WriteLine(">> Операция выполнена!\n");
-            }
-            else
-            {
-                Console.WriteLine(">> Операция не выполнена!\n");
-            }
         }
     }
 }

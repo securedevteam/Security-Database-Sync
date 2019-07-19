@@ -108,9 +108,14 @@ namespace SecurityDatabaseSync.UI.ConsoleApp.Implementations
 
         private void OperationResult(bool result)
         {
-            // TODO: Доделать в зависимости от результата.
-
-            Console.WriteLine(">> Операция выполнена!\n");
+            if(result)
+            {
+                Console.WriteLine(">> Операция выполнена!\n");
+            }
+            else
+            {
+                Console.WriteLine(">> Операция не выполнена!\n");
+            }
         }
     }
 }

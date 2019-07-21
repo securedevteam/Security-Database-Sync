@@ -30,8 +30,8 @@ namespace SecurityDatabaseSync.UI.ConsoleApp.Implementations
         {
             while (true)
             {
-                Console.WriteLine("-insert, -transfer, -clear, -clear-ident, -exit");
-                Console.Write("Введите команду: ");
+                Console.WriteLine(Constants.COMMAND_HARD);
+                Console.Write(Constants.ENTER_COMMAND);
                 var param = Console.ReadLine();
 
                 switch (param)
@@ -40,10 +40,10 @@ namespace SecurityDatabaseSync.UI.ConsoleApp.Implementations
                         {
                             Console.WriteLine();
 
-                            Console.Write("Введите название базы данных: ");
+                            Console.Write(Constants.ENTER_DATABASE_NAME);
                             var databaseName = Console.ReadLine();
 
-                            Console.Write("Введите идентификатор: ");
+                            Console.Write(Constants.ENTER_DATABASE_IDENTIFIER);
                             var identifier = Console.ReadLine();
 
                             var resultInsert = await _sync.InsertDataAsync(databaseName, identifier);
@@ -54,13 +54,13 @@ namespace SecurityDatabaseSync.UI.ConsoleApp.Implementations
 
                     case "-transfer":
                         {
-                            Console.Write("Введите название базы данных для экспорта: ");
+                            Console.Write(Constants.ENTER_DATABASE_EXPORT);
                             var dbFirst = Console.ReadLine();
 
-                            Console.Write("Введите название базы данных для импорта: ");
+                            Console.Write(Constants.ENTER_DATABASE_IMPORT);
                             var dbSecond = Console.ReadLine();
 
-                            Console.Write("Введите идентификатор: ");
+                            Console.Write(Constants.ENTER_DATABASE_IDENTIFIER);
                             var identifier = Console.ReadLine();
 
                             var resultCopy = await _sync.CopyDataAsync(dbFirst, dbSecond, identifier);
@@ -73,7 +73,7 @@ namespace SecurityDatabaseSync.UI.ConsoleApp.Implementations
                         {
                             Console.WriteLine();
 
-                            Console.Write("Введите название базы данных: ");
+                            Console.Write(Constants.ENTER_DATABASE_NAME);
                             var databaseName = Console.ReadLine();
 
                             var resultClear = await _sync.ClearDataAsync(databaseName);
@@ -86,10 +86,10 @@ namespace SecurityDatabaseSync.UI.ConsoleApp.Implementations
                         {
                             Console.WriteLine();
 
-                            Console.Write("Введите название базы данных: ");
+                            Console.Write(Constants.ENTER_DATABASE_NAME);
                             var databaseName = Console.ReadLine();
 
-                            Console.Write("Введите идентификатор: ");
+                            Console.Write(Constants.ENTER_DATABASE_IDENTIFIER);
                             var identifier = Console.ReadLine();
 
                             var resultClear = await _sync.ClearDataAsync(databaseName, identifier);
@@ -106,7 +106,7 @@ namespace SecurityDatabaseSync.UI.ConsoleApp.Implementations
 
                     default:
                         {
-                            Console.WriteLine(">> Введена неверная команда!\n");
+                            Console.WriteLine(Constants.INVALID_COMMAND);
                         }
                         break;
                 }

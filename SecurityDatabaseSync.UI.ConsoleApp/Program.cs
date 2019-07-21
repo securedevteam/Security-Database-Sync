@@ -1,5 +1,6 @@
 ﻿using SecurityDatabaseSync.BLL.Implementations;
 using SecurityDatabaseSync.BLL.Interfaces;
+using SecurityDatabaseSync.Core;
 using SecurityDatabaseSync.UI.ConsoleApp.Implementations;
 using SecurityDatabaseSync.UI.ConsoleApp.Interfaces;
 using System;
@@ -23,8 +24,8 @@ namespace SecurityDatabaseSync.UI.ConsoleApp
 
             while (true)
             {
-                Console.WriteLine("-hard, -hard-bulk, -default, -default-bulk, -quit");
-                Console.Write("Введите тип синхронизации: ");
+                Console.WriteLine(Constants.COMMAND_PROGRAM);
+                Console.Write(Constants.ENTER_SYNC_TYPE);
                 var param = Console.ReadLine();
 
                 switch(param)
@@ -64,7 +65,7 @@ namespace SecurityDatabaseSync.UI.ConsoleApp
 
                     default:
                         {
-                            Console.WriteLine(">> Введена неверная команда!\n");
+                            Console.WriteLine(Constants.INVALID_COMMAND);
                         }
                         break;
                 }

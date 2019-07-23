@@ -20,7 +20,7 @@ namespace SecurityDatabaseSync.BLL.Implementations
         public HardSyncController() { }
 
         /// <inheritdoc/>
-        public async Task InsertDataAsync(string databaseName, string identifier)
+        public async Task<bool> InsertDataAsync(string databaseName, string identifier)
         {
             using (ApplicationContext db = new ApplicationContext(databaseName))
             {
@@ -36,13 +36,15 @@ namespace SecurityDatabaseSync.BLL.Implementations
                     });
                 }
 
-                await db.TestModelTable.AddRangeAsync(data);
+                await db.AddRangeAsync(data);
                 await db.SaveChangesAsync();
+
+                return true;
             }
         }
 
         /// <inheritdoc/>
-        public async Task ClearDataAsync(string databaseName)
+        public async Task<bool> ClearDataAsync(string databaseName)
         {
             using (ApplicationContext db = new ApplicationContext(databaseName))
             {
@@ -56,12 +58,16 @@ namespace SecurityDatabaseSync.BLL.Implementations
                     }
 
                     await db.SaveChangesAsync();
+
+                    return true;
                 }
+
+                return false;
             }
         }
 
         /// <inheritdoc/>
-        public async Task ClearDataAsync(string databaseName, string identifier)
+        public async Task<bool> ClearDataAsync(string databaseName, string identifier)
         {
             using (ApplicationContext db = new ApplicationContext(databaseName))
             {
@@ -78,12 +84,16 @@ namespace SecurityDatabaseSync.BLL.Implementations
                     }
 
                     await db.SaveChangesAsync();
+
+                    return true;
                 }
+
+                return false;
             }
         }
 
         /// <inheritdoc/>
-        public async Task CopyDataAsync(string dbFirst, string dbSecond, string identifier)
+        public async Task<bool> CopyDataAsync(string dbFirst, string dbSecond, string identifier)
         {
             var dataFirst = new List<TestModel>();
             var dataSecond = new List<TestModel>();
@@ -110,6 +120,8 @@ namespace SecurityDatabaseSync.BLL.Implementations
 
                 await db.TestModelTable.AddRangeAsync(dataSecond);
                 await db.SaveChangesAsync();
+
+                return true;
             }
         }
     }

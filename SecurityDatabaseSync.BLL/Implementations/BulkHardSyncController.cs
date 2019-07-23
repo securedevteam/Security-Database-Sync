@@ -21,7 +21,7 @@ namespace SecurityDatabaseSync.BLL.Implementations
         public BulkHardSyncController() { }
 
         /// <inheritdoc/>
-        public async Task InsertDataAsync(string databaseName, string identifier)
+        public async Task<bool> InsertDataAsync(string databaseName, string identifier)
         {
             EntityFrameworkManager.ContextFactory = db => new ApplicationContext(databaseName);
 
@@ -40,11 +40,13 @@ namespace SecurityDatabaseSync.BLL.Implementations
                 }
 
                 await db.BulkInsertAsync(data);
+
+                return true;
             }
         }
 
         /// <inheritdoc/>
-        public async Task ClearDataAsync(string databaseName)
+        public async Task<bool> ClearDataAsync(string databaseName)
         {
             EntityFrameworkManager.ContextFactory = db => new ApplicationContext(databaseName);
 
@@ -55,12 +57,16 @@ namespace SecurityDatabaseSync.BLL.Implementations
                 if (data.Count != 0)
                 {
                     await db.BulkDeleteAsync(data);
+
+                    return true;
                 }
+
+                return false;
             }
         }
 
         /// <inheritdoc/>
-        public async Task ClearDataAsync(string databaseName, string identifier)
+        public async Task<bool> ClearDataAsync(string databaseName, string identifier)
         {
             EntityFrameworkManager.ContextFactory = db => new ApplicationContext(databaseName);
 
@@ -72,12 +78,16 @@ namespace SecurityDatabaseSync.BLL.Implementations
                 if (data.Count != 0)
                 {
                     await db.BulkDeleteAsync(data);
+
+                    return true;
                 }
+
+                return false;
             }
         }
 
         /// <inheritdoc/>
-        public async Task CopyDataAsync(string dbFirst, string dbSecond, string identifier)
+        public async Task<bool> CopyDataAsync(string dbFirst, string dbSecond, string identifier)
         {
             var dataFirst = new List<TestModel>();
             var dataSecond = new List<TestModel>();
@@ -106,6 +116,8 @@ namespace SecurityDatabaseSync.BLL.Implementations
                 }
 
                 await db.BulkInsertAsync(dataSecond);
+
+                return true;
             }
         }
     }

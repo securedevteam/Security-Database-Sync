@@ -1,4 +1,5 @@
 ﻿using SecurityDatabaseSync.BLL.Interfaces;
+using SecurityDatabaseSync.Core;
 using SecurityDatabaseSync.DAL.Models;
 using SecurityDatabaseSync.UI.ConsoleApp.Interfaces;
 using System;
@@ -31,8 +32,8 @@ namespace SecurityDatabaseSync.UI.ConsoleApp.Implementations
         {
             while (true)
             {
-                Console.WriteLine("-add, -delete, -update, -exit");
-                Console.Write("Введите команду: ");
+                Console.WriteLine(Constants.COMMAND_DEFAULT);
+                Console.Write(Constants.ENTER_COMMAND);
                 var param = Console.ReadLine();
 
                 switch (param)
@@ -43,7 +44,7 @@ namespace SecurityDatabaseSync.UI.ConsoleApp.Implementations
 
                             var resultAdd = await _defaultSyncController.AddOrDeleteDataToDatabaseAsync(client, server, false, targetDatabaseName);
 
-                            OperationResult(resultAdd);
+                            StaticMethods.OperationResult(resultAdd);
                         }
                         break;
 
@@ -53,7 +54,7 @@ namespace SecurityDatabaseSync.UI.ConsoleApp.Implementations
 
                             var resultDelete = await _defaultSyncController.AddOrDeleteDataToDatabaseAsync(server, client, true, targetDatabaseName);
 
-                            OperationResult(resultDelete);
+                            StaticMethods.OperationResult(resultDelete);
                         }
                         break;
 
@@ -63,7 +64,7 @@ namespace SecurityDatabaseSync.UI.ConsoleApp.Implementations
 
                             var resultUpdate = await _defaultSyncController.UpdateDataToServerAsync(client, server, targetDatabaseName);
 
-                            OperationResult(resultUpdate);
+                            StaticMethods.OperationResult(resultUpdate);
                         }
                         break;
 
@@ -75,7 +76,7 @@ namespace SecurityDatabaseSync.UI.ConsoleApp.Implementations
 
                     default:
                         {
-                            Console.WriteLine(">> Введена неверная команда!\n");
+                            Console.WriteLine(Constants.INVALID_COMMAND);
                         }
                         break;
                 }
@@ -88,29 +89,22 @@ namespace SecurityDatabaseSync.UI.ConsoleApp.Implementations
 
             Console.WriteLine();
 
-            Console.Write("Введите название базы данных для экспорта: ");
+            Console.Write(Constants.ENTER_DATABASE_EXPORT);
             var clientDatabaseName = Console.ReadLine();
 
-            Console.Write("Введите название базы данных для импорта: ");
+            Console.Write(Constants.ENTER_DATABASE_IMPORT);
             var serverDatabaseName = Console.ReadLine();
 
-            Console.Write("Введите идентификатор: ");
+            Console.Write(Constants.ENTER_DATABASE_IDENTIFIER);
             var identifier = Console.ReadLine();
 
-            Console.Write("Введите название целевой базы данных: ");
+            Console.Write(Constants.ENTER_DATABASE_TARGET);
             result.targetDatabaseName = Console.ReadLine();
 
             result.client = await _defaultSyncController.GetDataFromDatabaseAsync(clientDatabaseName, identifier);
             result.server = await _defaultSyncController.GetDataFromDatabaseAsync(serverDatabaseName, identifier);
 
             return result;
-        }
-
-        private void OperationResult(bool result)
-        {
-            // TODO: Доделать в зависимости от результата.
-
-            Console.WriteLine(">> Операция выполнена!\n");
         }
     }
 }

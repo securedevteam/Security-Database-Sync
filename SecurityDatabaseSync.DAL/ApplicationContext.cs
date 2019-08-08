@@ -7,7 +7,6 @@ namespace SecurityDatabaseSync.DAL
     {
         private readonly string _databaseName;
 
-        //public DbSet<Pledge> PledgeTable { get; set; }
         public DbSet<TestModel> TestModelTable { get; set; }
 
         public ApplicationContext(string databaseName)

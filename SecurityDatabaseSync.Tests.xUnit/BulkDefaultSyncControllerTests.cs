@@ -5,6 +5,6 @@ namespace Secure.SecurityDatabaseSync.Tests
 {
     public class BulkDefaultSyncControllerTests
     {
-        
+        // TODO: Не реализован
     }
 }

@@ -1,11 +1,8 @@
 ﻿using SecurityDatabaseSync.DAL;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Secure.SecurityDatabaseSync.Tests
 {
-    class ClearingDataContext
+    public class ClearingDataContext
     {
         private readonly ApplicationContext _context;
 

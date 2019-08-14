@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SecurityDatabaseSync.DAL;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.EntityFrameworkCore;
 using SecurityDatabaseSync.BLL.Interfaces;
 using SecurityDatabaseSync.BLL.Implementations;

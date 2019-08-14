@@ -9,39 +9,24 @@ using Xunit;
 
 namespace Secure.SecurityDatabaseSync.Tests
 {
-    public class BulkHardSyncControllerTests : IClassFixture<ServiceFixture>, IDisposable
+    public class BulkHardSyncControllerTests
     {
-        private readonly ServiceProvider _serviceProvider;
-        private readonly ApplicationContext _context;
-        private readonly ClearingDataContext _clearingDataContext;
-
         private readonly Random rnd = new Random();
-
-        public BulkHardSyncControllerTests(ServiceFixture fixture)
-        {
-            _serviceProvider = fixture.ServiceProvider;
-
-            _context = _serviceProvider.GetRequiredService<ApplicationContext>();
-
-            _clearingDataContext = new ClearingDataContext(_context);
-        }
-
-        public void Dispose()
-        {
-            _clearingDataContext.Clear();
-        }
 
         [Fact]
         public async void InsertDataAsync_Return_True()
         {
-            var databaseName = "dataBase";
-            var identifier = "1";
+            // Arrange
+            var databaseName = Guid.NewGuid().ToString();
+            var identifier = $"{rnd.Next(100).ToString()} ";
             var operationResult = true;
 
+            // Act
             ISyncController syncController = new BulkHardSyncController();
 
             var result = await syncController.InsertDataAsync(databaseName, identifier);
 
+            // Assert
             Assert.Equal(operationResult, result);
         }
 
@@ -66,8 +51,8 @@ namespace Secure.SecurityDatabaseSync.Tests
                 });
             }
 
-            _context.TestModelTable.AddRange(listTestModel);
-            _context.SaveChanges();
+            //_context.TestModelTable.AddRange(listTestModel);
+            //_context.SaveChanges();
 
             var result = await syncController.ClearDataAsync(databaseName);
 

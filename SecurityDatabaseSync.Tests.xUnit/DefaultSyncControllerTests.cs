@@ -1,7 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using SecurityDatabaseSync.BLL.Implementations;
+﻿using SecurityDatabaseSync.BLL.Implementations;
 using SecurityDatabaseSync.BLL.Interfaces;
-using SecurityDatabaseSync.DAL;
 using SecurityDatabaseSync.DAL.Models;
 using System;
 using System.Collections.Generic;
@@ -9,6 +7,9 @@ using Xunit;
 
 namespace Secure.SecurityDatabaseSync.Tests
 {
+    /// <summary>
+    /// Класс для тестов класса DefaultSyncController.
+    /// </summary>
     public class DefaultSyncControllerTests
     {
         private readonly Random rnd = new Random();

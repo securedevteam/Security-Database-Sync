@@ -5,6 +5,9 @@ using Xunit;
 
 namespace Secure.SecurityDatabaseSync.Tests
 {
+    /// <summary>
+    /// Класс для тестов класса BulkHurdSyncController.
+    /// </summary>
     public class BulkHardSyncControllerTests
     {
         private readonly Random rnd = new Random();

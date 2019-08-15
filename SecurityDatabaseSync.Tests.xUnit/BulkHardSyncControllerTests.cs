@@ -1,10 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using SecurityDatabaseSync.BLL.Implementations;
+﻿using SecurityDatabaseSync.BLL.Implementations;
 using SecurityDatabaseSync.BLL.Interfaces;
-using SecurityDatabaseSync.DAL;
-using SecurityDatabaseSync.DAL.Models;
 using System;
-using System.Collections.Generic;
 using Xunit;
 
 namespace Secure.SecurityDatabaseSync.Tests
@@ -16,6 +12,9 @@ namespace Secure.SecurityDatabaseSync.Tests
         private readonly string _databaseSecondName = Guid.NewGuid().ToString();
         private readonly string _identifier = "test_";
 
+        /// <summary>
+        /// Тест на проверку добавления данных.
+        /// </summary>
         [Fact]
         public async void InsertDataAsync_Return_True()
         {
@@ -32,6 +31,9 @@ namespace Secure.SecurityDatabaseSync.Tests
             Assert.Equal(operationResult, resultSecond);
         }
 
+        /// <summary>
+        /// Тест на проверку удаления данных.
+        /// </summary>
         [Fact]
         public async void ClearDataWithIdentifierAsync_Return_False()
         {
@@ -45,6 +47,9 @@ namespace Secure.SecurityDatabaseSync.Tests
             Assert.Equal(operationResult, result);
         }
 
+        /// <summary>
+        /// Тест на проверку обновления данных.
+        /// </summary>
         [Fact]
         public async void CopyDataAsync_Return_True()
         {

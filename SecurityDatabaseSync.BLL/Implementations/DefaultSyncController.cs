@@ -41,12 +41,6 @@ namespace SecurityDatabaseSync.BLL.Implementations
             }
         }
 
-
-        // Пункт 1.1 Если в отделении нет записи из этого отделения, то удалить ее и на сервере
-        // Пункт 1.2 Если на сервере нет записей других отделений, то удалить их и в отделении
-        // Пункт 1.4 Добавить на сервер недостающие записи
-        // Пункт 1.5 Добавить в отделение недостающие записи
-
         /// <inheritdoc/>
         public async Task<bool> AddOrDeleteDataToDatabaseAsync(List<TestModel> firstData, List<TestModel> secondData, bool remove, string databaseName)
         {
@@ -98,9 +92,6 @@ namespace SecurityDatabaseSync.BLL.Implementations
 
             return false;
         }
-
-
-        // Пункт 1.3  Если на сервере и оделении записи различаются по UpdateDate, то выполнить Update записи с меньшей датой
 
         /// <inheritdoc/>
         public async Task<bool> UpdateDataToServerAsync(List<TestModel> firstData, List<TestModel> secondData, string databaseName)

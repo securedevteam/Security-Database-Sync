@@ -1,8 +1,4 @@
 # Security-Database-Sync
-[![Travis][build-badge]][build]
-
-[build-badge]: https://img.shields.io/travis/SECUREDEVTEAM/Security-Database-Sync/master.png?style=flat-square
-[build]: https://travis-ci.org/SECUREDEVTEAM/Security-Database-Sync
 
 Разработанное программное обеспечение позволяет провести синхронизацию для N-количества баз данных одинаковых по строению таблиц. Идеей реализации данного проекта была необходимость в синхронизации баз данных MS SQL Server, где на сервере постоянно должны быть актуальные (обновленные) данные со всех других баз данных. Данное приложение имеет ряд возможностей для синхронизации, очистку и шаблонное заполнение определенной таблицы в базе данных. Основной интерфейс приложения реализован в виде Console App.
 

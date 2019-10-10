@@ -1,4 +1,5 @@
 # Security-Database-Sync
+[![Build Status](https://dev.azure.com/30CTB/Security-Database-Sync/_apis/build/status/securedevteam.Security-Database-Sync?branchName=master)](https://dev.azure.com/30CTB/Security-Database-Sync/_build/latest?definitionId=3&branchName=master)
 
 Разработанное программное обеспечение позволяет провести синхронизацию для N-количества баз данных одинаковых по строению таблиц. Идеей реализации данного проекта была необходимость в синхронизации баз данных MS SQL Server, где на сервере постоянно должны быть актуальные (обновленные) данные со всех других баз данных. Данное приложение имеет ряд возможностей для синхронизации, очистку и шаблонное заполнение определенной таблицы в базе данных. Основной интерфейс приложения реализован в виде Console App.
 

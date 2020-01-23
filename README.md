@@ -14,6 +14,7 @@ The developed software allows synchronization for the N-number of databases with
 ## Built With
 - [N-Layer architecture](https://docs.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure/common-web-application-architectures);
 - [LINQ](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/) (Language-Integrated Query) - uniform query syntax in C#;
+- Manual and [xUnit](https://xunit.net/) testing;
 - [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/) - data access technology; 
 - [Git](https://git-scm.com/) - version control system;
 - [Trello](https://trello.com/en) - a web-based Kanban-style list-making application;

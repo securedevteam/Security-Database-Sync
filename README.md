@@ -17,6 +17,7 @@ The developed software allows synchronization for the N-number of databases with
 - [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/) - data access technology; 
 - [Git](https://git-scm.com/) - version control system;
 - [Trello](https://trello.com/en) - a web-based Kanban-style list-making application;
+- [Azure Pipelines](https://azure.microsoft.com/en-us/services/devops/) - continuous integration;
 
 ## Authors
 - [Mikhail M.](https://mikhailmasny.github.io/) - Architect & .NET Developer;

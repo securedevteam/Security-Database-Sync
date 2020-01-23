@@ -1,19 +1,26 @@
-# Security-Database-Sync
+# Database Sync
+
 [![Build Status](https://dev.azure.com/30CTB/Security-Database-Sync/_apis/build/status/securedevteam.Security-Database-Sync?branchName=master)](https://dev.azure.com/30CTB/Security-Database-Sync/_build/latest?definitionId=3&branchName=master)
 
-Разработанное программное обеспечение позволяет провести синхронизацию для N-количества баз данных одинаковых по строению таблиц. Идеей реализации данного проекта была необходимость в синхронизации баз данных MS SQL Server, где на сервере постоянно должны быть актуальные (обновленные) данные со всех других баз данных. Данное приложение имеет ряд возможностей для синхронизации, очистку и шаблонное заполнение определенной таблицы в базе данных. Основной интерфейс приложения реализован в виде Console App.
+The developed software allows synchronization for the N-number of databases with identical tables. The idea of this project was the need for synchronization of MS SQL Server databases, where the server must constantly have up-to-date (updated) data from all other databases. This application has a number of features for synchronization, cleaning and template filling of a specific table in the database. The main application interface is implemented as a Console App.
 
-Что было реализовано:
-- Консольное приложение для запуска выбранной синхронизации;
-- Жесткая синхронизация.
-- Жесткая синхронизация через Bulk операции.
-- Гибкая синхронизация.
-- Гибкая синхронизация через Bulk операции.
+## Application features
+1. Console application to start the selected synchronization;
+2. Hard sync;
+3. Hard synchronization through Bulk operation;
+4. Flexible synchronization;
+5. Flexible synchronization through Bulk operation;
 
-Используемый стек технологий:
-- Console App Core приложение;
-- N-Layer архитектура;
-- Entity Framework Core;
-- LINQ (Language-Integrated Query);
-- Система контроля версий: Git;
-- Система менеджмента заданий: Trello;
+## Built With
+- [N-Layer architecture](https://docs.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure/common-web-application-architectures);
+- [LINQ](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/) (Language-Integrated Query) - uniform query syntax in C#;
+- [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/) - data access technology; 
+- [Git](https://git-scm.com/) - version control system;
+- [Trello](https://trello.com/en) - a web-based Kanban-style list-making application;
+
+## Authors
+- [Mikhail M.](https://mikhailmasny.github.io/) - Architect & .NET Developer;
+- [Alexandr G.](https://s207883.github.io/) - Full-stack .NET Developer;
+
+## License
+This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/securedevteam/Security-Database-Sync/blob/master/LICENSE) file for details.

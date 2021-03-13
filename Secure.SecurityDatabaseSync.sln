@@ -3,20 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28729.10
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SecurityDatabaseSync.DAL", "SecurityDatabaseSync.DAL\SecurityDatabaseSync.DAL.csproj", "{3A849E21-04BD-4436-AA3E-C726F04E51B9}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SecurityDatabaseSync.BLL", "SecurityDatabaseSync.BLL\SecurityDatabaseSync.BLL.csproj", "{FF048829-1D0A-4DEC-B43F-F3ECCC8D9B7A}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SecurityDatabaseSync.UI.ConsoleApp", "SecurityDatabaseSync.UI.ConsoleApp\SecurityDatabaseSync.UI.ConsoleApp.csproj", "{86FCE745-2A39-4494-824A-6A5828DC4323}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SecurityDatabaseSync.Core", "SecurityDatabaseSync.Core\SecurityDatabaseSync.Core.csproj", "{FF4E2792-EBCB-42C1-A231-AF3073CD5C10}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E4B7FC1B-6E99-4A60-8A48-CD267A016FEA}"
 	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
 		.travis.yml = .travis.yml
+		azure-pipelines.yml = azure-pipelines.yml
+		LICENSE = LICENSE
+		README.md = README.md
 	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SecurityDatabaseSync.Tests.xUnit", "SecurityDatabaseSync.Tests.xUnit\SecurityDatabaseSync.Tests.xUnit.csproj", "{5EFFA001-378A-44CE-B41D-87D6B365C781}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Secure.SecurityDatabaseSync.DAL", "src\Secure.SecurityDatabaseSync.DAL\Secure.SecurityDatabaseSync.DAL.csproj", "{15C74F13-1183-46E5-85D7-8CC37386E4AD}"
 EndProject
@@ -30,26 +25,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3A849E21-04BD-4436-AA3E-C726F04E51B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3A849E21-04BD-4436-AA3E-C726F04E51B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3A849E21-04BD-4436-AA3E-C726F04E51B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3A849E21-04BD-4436-AA3E-C726F04E51B9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FF048829-1D0A-4DEC-B43F-F3ECCC8D9B7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FF048829-1D0A-4DEC-B43F-F3ECCC8D9B7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FF048829-1D0A-4DEC-B43F-F3ECCC8D9B7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FF048829-1D0A-4DEC-B43F-F3ECCC8D9B7A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{86FCE745-2A39-4494-824A-6A5828DC4323}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{86FCE745-2A39-4494-824A-6A5828DC4323}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{86FCE745-2A39-4494-824A-6A5828DC4323}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{86FCE745-2A39-4494-824A-6A5828DC4323}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FF4E2792-EBCB-42C1-A231-AF3073CD5C10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FF4E2792-EBCB-42C1-A231-AF3073CD5C10}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FF4E2792-EBCB-42C1-A231-AF3073CD5C10}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FF4E2792-EBCB-42C1-A231-AF3073CD5C10}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5EFFA001-378A-44CE-B41D-87D6B365C781}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5EFFA001-378A-44CE-B41D-87D6B365C781}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5EFFA001-378A-44CE-B41D-87D6B365C781}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5EFFA001-378A-44CE-B41D-87D6B365C781}.Release|Any CPU.Build.0 = Release|Any CPU
 		{15C74F13-1183-46E5-85D7-8CC37386E4AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{15C74F13-1183-46E5-85D7-8CC37386E4AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15C74F13-1183-46E5-85D7-8CC37386E4AD}.Release|Any CPU.ActiveCfg = Release|Any CPU

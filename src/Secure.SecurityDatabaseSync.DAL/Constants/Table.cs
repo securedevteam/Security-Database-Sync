@@ -6,13 +6,8 @@
     public static class Table
     {
         /// <summary>
-        /// FirstModels.
+        /// Commons.
         /// </summary>
-        public const string FirstModels = nameof(FirstModels);
-
-        /// <summary>
-        /// SecondModels.
-        /// </summary>
-        public const string SecondModels = nameof(SecondModels);
+        public const string Commons = nameof(Commons);
     }
 }

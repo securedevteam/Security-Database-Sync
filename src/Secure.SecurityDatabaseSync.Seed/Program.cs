@@ -2,31 +2,47 @@
 using Secure.SecurityDatabaseSync.DAL.Models;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Secure.SecurityDatabaseSync.Seed
 {
-    class Program
+    internal class Program
     {
-        static async System.Threading.Tasks.Task Main(string[] args)
+        private static async Task Main(string[] args)
         {
             Console.WriteLine("Database filling started..");
 
-            IEnumerable<FirstModel> GetFirstModels()
+            Console.Write("Enter database name: ");
+            var databaseName = Console.ReadLine();
+
+            Console.Write("Enter code name: ");
+            var code = Console.ReadLine();
+
+            Console.Write("Enter count of entities: ");
+            var count = int.Parse(Console.ReadLine());
+
+            IEnumerable<Common> GetModels()
             {
-                for (int i = 0; i < 1000; i++)
+                for (int i = 0; i < count; i++)
                 {
-                    yield return new FirstModel
+                    var guid = Guid.NewGuid().ToString();
+
+                    yield return new Common
                     {
-                        Name = Guid.NewGuid().ToString(),
-                        Description = Guid.NewGuid().ToString(),
+                        InternalNumber = guid,
+                        Code = code.ToUpper(),
+                        Name = Regex.Replace(guid, @"\d", ""),
+                        Updated = DateTime.Now,
                     };
                 }
             }
 
             try
             {
-                using var context = new FirstAppContext();
-                await context.FirstModels.AddRangeAsync(GetFirstModels());
+                using var context = new ApplicationContext(databaseName);
+                context.Database.EnsureCreated();
+                await context.Commons.AddRangeAsync(GetModels());
                 await context.SaveChangesAsync();
 
                 Console.WriteLine("Database filling ended..");

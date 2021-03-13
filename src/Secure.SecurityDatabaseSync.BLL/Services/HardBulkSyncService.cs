@@ -10,47 +10,59 @@ using System.Threading.Tasks;
 
 namespace Secure.SecurityDatabaseSync.BLL.Services
 {
-    public class HardBulkSyncService : IHardBulkSyncService
+    public class HardBulkSyncService : IHardBulkSyncService, IDisposable
     {
-        private readonly FirstAppContext _firstAppContext;
-        private readonly SecondAppContext _secondAppContext;
+        private readonly ApplicationContext _firstAppContext;
+        private readonly ApplicationContext _secondAppContext;
+        private readonly string _code;
 
         public HardBulkSyncService(
-            FirstAppContext firstAppContext,
-            SecondAppContext secondAppContext)
+            string source,
+            string target,
+            string code)
         {
-            _firstAppContext = firstAppContext ?? throw new ArgumentNullException(nameof(firstAppContext));
-            _secondAppContext = secondAppContext ?? throw new ArgumentNullException(nameof(secondAppContext));
+            _firstAppContext = new ApplicationContext(source);
+            _secondAppContext = new ApplicationContext(target);
+            _code = code;
+        }
+
+        public void Dispose()
+        {
+            _firstAppContext.Dispose();
+            _secondAppContext.Dispose();
         }
 
         public async Task RunAsync()
         {
             var firstAppContextModels =
-                await _firstAppContext.FirstModels
+                await _firstAppContext.Commons
                     .AsNoTracking()
+                    .Where(model => model.Code == _code)
                     .ToListAsync();
 
             var secondAppContextModels =
-                await _secondAppContext.SecondModels
+                await _secondAppContext.Commons
                     .AsNoTracking()
+                    .Where(model => model.Code == _code)
                     .ToListAsync();
 
             await _secondAppContext.BulkDeleteAsync(secondAppContextModels);
 
-            IEnumerable<SecondModel> GetSecondModelsToAdd()
+            IEnumerable<Common> GetModelsToAdd()
             {
                 foreach (var firstModel in firstAppContextModels)
                 {
-                    yield return new SecondModel
+                    yield return new Common
                     {
-                        AnotherSystemId = firstModel.Id,
+                        InternalNumber = firstModel.InternalNumber,
+                        Code = _code,
                         Name = firstModel.Name,
                         Updated = DateTime.Now,
                     };
                 }
             }
 
-            var modelsToAdd = GetSecondModelsToAdd().ToList();
+            var modelsToAdd = GetModelsToAdd().ToList();
             await _secondAppContext.BulkInsertAsync(modelsToAdd);
         }
     }

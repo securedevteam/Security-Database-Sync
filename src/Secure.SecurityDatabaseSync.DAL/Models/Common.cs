@@ -3,9 +3,9 @@
 namespace Secure.SecurityDatabaseSync.DAL.Models
 {
     /// <summary>
-    /// Second model entity.
+    /// Common entity.
     /// </summary>
-    public class SecondModel
+    public class Common
     {
         /// <summary>
         /// Identifier.
@@ -13,9 +13,14 @@ namespace Secure.SecurityDatabaseSync.DAL.Models
         public int Id { get; set; }
 
         /// <summary>
-        /// Identifier from another system.
+        /// Internal identifier.
         /// </summary>
-        public int AnotherSystemId { get; set; }
+        public string InternalNumber { get; set; }
+
+        /// <summary>
+        /// Identifier of system.
+        /// </summary>
+        public string Code { get; set; }
 
         /// <summary>
         /// Name.

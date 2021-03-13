@@ -11,6 +11,21 @@
         public const string ENTER_SYNC_TYPE = "Enter sync type: ";
 
         /// <summary>
+        /// Enter source database name message.
+        /// </summary>
+        public const string ENTER_DATABASE_SOURCE = "Enter source database name: ";
+
+        /// <summary>
+        /// Enter target database name message.
+        /// </summary>
+        public const string ENTER_DATABASE_TARGET = "Enter target database name: ";
+
+        /// <summary>
+        /// Enter database code message.
+        /// </summary>
+        public const string ENTER_DATABASE_CODE = "Enter database code (field): ";
+
+        /// <summary>
         /// Invalid command message.
         /// </summary>
         public const string COMMAND_INVALID = ">> Invalid command entered. Try it again!";

@@ -10,17 +10,26 @@ using System.Threading.Tasks;
 namespace Secure.SecurityDatabaseSync.BLL.Services
 {
     /// <inheritdoc cref="IDefaultSyncService"/>
-    public class DefaultSyncService : IDefaultSyncService
+    public class DefaultSyncService : IDefaultSyncService, IDisposable
     {
-        private readonly FirstAppContext _firstAppContext;
-        private readonly SecondAppContext _secondAppContext;
+        private readonly ApplicationContext _sourceContext;
+        private readonly ApplicationContext _targetContext;
+        private readonly string _code;
 
         public DefaultSyncService(
-            FirstAppContext firstAppContext,
-            SecondAppContext secondAppContext)
+            string source,
+            string target,
+            string code)
         {
-            _firstAppContext = firstAppContext ?? throw new ArgumentNullException(nameof(firstAppContext));
-            _secondAppContext = secondAppContext ?? throw new ArgumentNullException(nameof(secondAppContext));
+            _sourceContext = new ApplicationContext(source);
+            _targetContext = new ApplicationContext(target);
+            _code = code;
+        }
+
+        public void Dispose()
+        {
+            _sourceContext.Dispose();
+            _targetContext.Dispose();
         }
 
         public async Task RunAsync()
@@ -32,107 +41,120 @@ namespace Secure.SecurityDatabaseSync.BLL.Services
 
         private async Task DeleteAsync()
         {
-            var firstAppContextModels =
-                await _firstAppContext.FirstModels
+            var sourceModels =
+                await _sourceContext.Commons
                     .AsNoTracking()
+                    .Where(model => model.Code == _code)
                     .ToListAsync();
 
-            var secondAppContextModels =
-                await _secondAppContext.SecondModels
+            var targetModels =
+                await _targetContext.Commons
                     .AsNoTracking()
+                    .Where(model => model.Code == _code)
                     .ToListAsync();
 
             var idsToDelete =
-                secondAppContextModels
-                    .Select(model => model.AnotherSystemId)
-                    .Except(firstAppContextModels
-                        .Select(model => model.Id));
+                targetModels
+                    .Select(model => model.InternalNumber)
+                    .Except(sourceModels
+                        .Select(model => model.InternalNumber));
 
             if (idsToDelete.Any())
             {
-                _secondAppContext.SecondModels
-                    .RemoveRange(secondAppContextModels
-                        .Where(model => idsToDelete.Contains(model.AnotherSystemId)));
+                _targetContext.Commons
+                    .RemoveRange(targetModels
+                        .Where(model => idsToDelete.Contains(model.InternalNumber)));
 
-                await _secondAppContext.SaveChangesAsync();
+                await _targetContext.SaveChangesAsync();
             }
         }
 
         private async Task AddAsync()
         {
-            var firstAppContextModels =
-                await _firstAppContext.FirstModels
+            var sourceModels =
+                await _sourceContext.Commons
                     .AsNoTracking()
+                    .Where(model => model.Code == _code)
                     .ToListAsync();
 
-            var secondAppContextModels =
-                await _secondAppContext.SecondModels
+            var targetModels =
+                await _targetContext.Commons
                     .AsNoTracking()
+                    .Where(model => model.Code == _code)
                     .ToListAsync();
 
             var idsToAdd =
-                firstAppContextModels
-                    .Select(model => model.Id)
-                    .Except(secondAppContextModels
-                        .Select(model => model.AnotherSystemId));
+                sourceModels
+                    .Select(model => model.InternalNumber)
+                    .Except(targetModels
+                        .Select(model => model.InternalNumber));
 
             if (idsToAdd.Any())
             {
-                IEnumerable<SecondModel> GetSecondModelToAdd()
+                IEnumerable<Common> GetModelsToAdd()
                 {
-                    var modelsToAdd = firstAppContextModels.Where(model => idsToAdd.Contains(model.Id));
+                    var sourceModelsToAdd = sourceModels.Where(model => idsToAdd.Contains(model.InternalNumber));
 
-                    foreach (var firstModel in modelsToAdd)
+                    foreach (var sourceModel in sourceModelsToAdd)
                     {
-                        yield return new SecondModel
+                        yield return new Common
                         {
-                            AnotherSystemId = firstModel.Id,
-                            Name = firstModel.Name,
+                            InternalNumber = sourceModel.InternalNumber,
+                            Code = sourceModel.Code,
+                            Name = sourceModel.Name,
                             Updated = DateTime.Now,
                         };
                     }
                 }
 
-                await _secondAppContext.SecondModels.AddRangeAsync(GetSecondModelToAdd());
-                await _secondAppContext.SaveChangesAsync();
+                await _targetContext.Commons.AddRangeAsync(GetModelsToAdd());
+                await _targetContext.SaveChangesAsync();
             }
         }
 
         private async Task UpdateAsync()
         {
-            var firstAppContextModels =
-                await _firstAppContext.FirstModels
+            var sourceModels =
+                await _sourceContext.Commons
                     .AsNoTracking()
+                    .Where(model => model.Code == _code)
                     .ToListAsync();
 
-            var secondAppContextModels =
-                await _secondAppContext.SecondModels
+            var targetModels =
+                await _targetContext.Commons
                     .AsNoTracking()
+                    .Where(model => model.Code == _code)
                     .ToListAsync();
 
-            var modelsToUpdate = new List<SecondModel>();
-            foreach (var secondModel in secondAppContextModels)
+            IEnumerable<Common> GetModelsToUpdate()
             {
-                var firstModel = firstAppContextModels.FirstOrDefault(model => model.Id == secondModel.AnotherSystemId);
-                var isUpdated = false;
-
-                if (secondModel.Name != firstModel.Name)
+                foreach (var targetModel in targetModels)
                 {
-                    isUpdated = true;
-                    secondModel.Name = firstModel.Name;
-                    secondModel.Updated = DateTime.Now;
-                }
+                    var sourceModel =
+                        sourceModels
+                            .FirstOrDefault(model => model.InternalNumber == targetModel.InternalNumber);
 
-                if (isUpdated)
-                {
-                    modelsToUpdate.Add(secondModel);
+                    var isUpdated = false;
+
+                    if (targetModel.Name != sourceModel.Name)
+                    {
+                        isUpdated = true;
+                        targetModel.Name = sourceModel.Name;
+                        targetModel.Updated = DateTime.Now;
+                    }
+
+                    if (isUpdated)
+                    {
+                        yield return targetModel;
+                    }
                 }
             }
 
+            var modelsToUpdate = GetModelsToUpdate();
             if (modelsToUpdate.Any())
             {
-                _secondAppContext.SecondModels.UpdateRange(modelsToUpdate);
-                await _secondAppContext.SaveChangesAsync();
+                _targetContext.Commons.UpdateRange(modelsToUpdate);
+                await _targetContext.SaveChangesAsync();
             }
         }
     }

@@ -6,7 +6,7 @@ The developed software allows synchronization for the N-number of databases with
 
 ## Application features
 1. Console application to start the selected synchronization;
-2. Hard sync;
+1. Console application to seed data;
 3. Hard synchronization through Bulk operation;
 4. Flexible synchronization;
 5. Flexible synchronization through Bulk operation;
@@ -14,12 +14,9 @@ The developed software allows synchronization for the N-number of databases with
 ## Built With
 - [N-Layer architecture](https://docs.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure/common-web-application-architectures);
 - [LINQ](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/) (Language-Integrated Query) - uniform query syntax in C#;
-- Manual and [xUnit](https://xunit.net/) testing;
 - [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/) - data access technology;
 - [Console application on .NET Core](https://docs.microsoft.com/en-us/dotnet/core/about);
 - [Git](https://git-scm.com/) - version control system;
-- [Trello](https://trello.com/en) - a web-based Kanban-style list-making application;
-- [Azure Pipelines](https://azure.microsoft.com/en-us/services/devops/) - continuous integration;
 
 ## Authors
 - [Mikhail M.](https://mikhailmasny.github.io/) - Architect & .NET Developer;

@@ -10,7 +10,8 @@ using System.Threading.Tasks;
 
 namespace Secure.SecurityDatabaseSync.BLL.Services
 {
-    public class HardBulkSyncService : IHardBulkSyncService, IDisposable
+    /// <inheritdoc cref="ISyncService"/>
+    public class HardBulkSyncService : ISyncService, IDisposable
     {
         private readonly ApplicationContext _firstAppContext;
         private readonly ApplicationContext _secondAppContext;
@@ -30,6 +31,8 @@ namespace Secure.SecurityDatabaseSync.BLL.Services
         {
             _firstAppContext.Dispose();
             _secondAppContext.Dispose();
+
+            GC.SuppressFinalize(this);
         }
 
         public async Task RunAsync()

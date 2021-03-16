@@ -10,8 +10,8 @@ using System.Threading.Tasks;
 
 namespace Secure.SecurityDatabaseSync.BLL.Services
 {
-    /// <inheritdoc cref="IBulkSyncService"/>
-    public class BulkSyncService : IBulkSyncService
+    /// <inheritdoc cref="ISyncService"/>
+    public class BulkSyncService : ISyncService, IDisposable
     {
         private readonly ApplicationContext _sourceContext;
         private readonly ApplicationContext _targetContext;
@@ -31,6 +31,8 @@ namespace Secure.SecurityDatabaseSync.BLL.Services
         {
             _sourceContext.Dispose();
             _targetContext.Dispose();
+
+            GC.SuppressFinalize(this);
         }
 
         public async Task RunAsync()

@@ -1,4 +1,5 @@
-﻿using Secure.SecurityDatabaseSync.BLL.Services;
+﻿using Secure.SecurityDatabaseSync.BLL.Interfaces;
+using Secure.SecurityDatabaseSync.BLL.Services;
 using System;
 using System.Threading.Tasks;
 
@@ -13,44 +14,41 @@ namespace Secure.SecurityDatabaseSync.UI
             {
                 Console.WriteLine();
 
-                Console.Write(UiConstant.ENTER_SYNC_TYPE);
-                var syncType = Console.ReadLine();
-                Console.Write(UiConstant.ENTER_DATABASE_SOURCE);
-                var sourceDb = Console.ReadLine();
-                Console.Write(UiConstant.ENTER_DATABASE_CODE);
-                var code = Console.ReadLine().ToUpper();
-                Console.Write(UiConstant.ENTER_DATABASE_TARGET);
-                var targetDb = Console.ReadLine();
-
                 try
                 {
-                    var incorrectUserInputData = false;
-
-                    if (string.IsNullOrEmpty(sourceDb))
+                    Console.Write(UiConstant.ENTER_SYNC_TYPE);
+                    var syncType = Console.ReadLine();
+                    if (string.IsNullOrWhiteSpace(syncType))
                     {
-                        incorrectUserInputData = true;
+                        throw new ArgumentException(UiConstant.INVALID_DATABASE_SOURCE, nameof(syncType));
                     }
 
-                    if (string.IsNullOrEmpty(code))
+                    Console.Write(UiConstant.ENTER_DATABASE_SOURCE);
+                    var sourceDb = Console.ReadLine();
+                    if (string.IsNullOrWhiteSpace(sourceDb))
                     {
-                        incorrectUserInputData = true;
+                        throw new ArgumentException(UiConstant.INVALID_DATABASE_SOURCE, nameof(sourceDb));
                     }
 
-                    if (string.IsNullOrEmpty(targetDb))
+                    Console.Write(UiConstant.ENTER_DATABASE_CODE);
+                    var code = Console.ReadLine().ToUpper();
+                    if (string.IsNullOrWhiteSpace(code))
                     {
-                        incorrectUserInputData = true;
+                        throw new ArgumentException(UiConstant.INVALID_CODE, nameof(code));
                     }
 
-                    if (incorrectUserInputData)
+                    Console.Write(UiConstant.ENTER_DATABASE_TARGET);
+                    var targetDb = Console.ReadLine();
+                    if (string.IsNullOrWhiteSpace(targetDb))
                     {
-                        throw new ArgumentException();
+                        throw new ArgumentException(UiConstant.INVALID_DATABASE_TARGET, nameof(targetDb));
                     }
 
                     switch (syncType)
                     {
                         case "--default":
                             {
-                                var defaultSyncService = new DefaultSyncService(sourceDb, targetDb, code);
+                                ISyncService defaultSyncService = new DefaultSyncService(sourceDb, targetDb, code);
                                 await defaultSyncService.RunAsync();
                                 Console.WriteLine(UiConstant.COMMAND_COMPLETED);
                             }
@@ -58,7 +56,7 @@ namespace Secure.SecurityDatabaseSync.UI
 
                         case "--bulk":
                             {
-                                var bulkSyncService = new BulkSyncService(sourceDb, targetDb, code);
+                                ISyncService bulkSyncService = new BulkSyncService(sourceDb, targetDb, code);
                                 await bulkSyncService.RunAsync();
                                 Console.WriteLine(UiConstant.COMMAND_COMPLETED);
                             }
@@ -66,7 +64,7 @@ namespace Secure.SecurityDatabaseSync.UI
 
                         case "--hard-bulk":
                             {
-                                var hardBulkSyncService = new HardBulkSyncService(sourceDb, targetDb, code);
+                                ISyncService hardBulkSyncService = new HardBulkSyncService(sourceDb, targetDb, code);
                                 await hardBulkSyncService.RunAsync();
                                 Console.WriteLine(UiConstant.COMMAND_COMPLETED);
                             }

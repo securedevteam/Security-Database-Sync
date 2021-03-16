@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 
 namespace Secure.SecurityDatabaseSync.BLL.Services
 {
-    /// <inheritdoc cref="IDefaultSyncService"/>
-    public class DefaultSyncService : IDefaultSyncService, IDisposable
+    /// <inheritdoc cref="ISyncService"/>
+    public class DefaultSyncService : ISyncService, IDisposable
     {
         private readonly ApplicationContext _sourceContext;
         private readonly ApplicationContext _targetContext;
@@ -30,6 +30,8 @@ namespace Secure.SecurityDatabaseSync.BLL.Services
         {
             _sourceContext.Dispose();
             _targetContext.Dispose();
+
+            GC.SuppressFinalize(this);
         }
 
         public async Task RunAsync()

@@ -44,5 +44,20 @@
         /// Available command message.
         /// </summary>
         public const string COMMAND_AVAILABLE_LIST = "--default, --bulk, --hard-bulk, --quit";
+
+        /// <summary>
+        /// Invalid user input message.
+        /// </summary>
+        public const string INVALID_CODE = "Invalid code";
+
+        /// <summary>
+        /// Invalid database source.
+        /// </summary>
+        public const string INVALID_DATABASE_SOURCE = "Invalid database source";
+
+        /// <summary>
+        /// Invalid database target.
+        /// </summary>
+        public const string INVALID_DATABASE_TARGET = "Invalid target database";
     }
 }

@@ -7,8 +7,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
-		.travis.yml = .travis.yml
-		azure-pipelines.yml = azure-pipelines.yml
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
@@ -17,9 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Secure.SecurityDatabaseSync
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Secure.SecurityDatabaseSync.BLL", "src\Secure.SecurityDatabaseSync.BLL\Secure.SecurityDatabaseSync.BLL.csproj", "{655A675A-DAAA-40B2-AA06-B27B3C87FFED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Secure.SecurityDatabaseSync.UI", "src\Secure.SecurityDatabaseSync.UI\Secure.SecurityDatabaseSync.UI.csproj", "{DB2F40E0-1072-4B01-A462-1BDDB5E032B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Secure.SecurityDatabaseSync.UI", "src\Secure.SecurityDatabaseSync.UI\Secure.SecurityDatabaseSync.UI.csproj", "{DB2F40E0-1072-4B01-A462-1BDDB5E032B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Secure.SecurityDatabaseSync.Seed", "src\Secure.SecurityDatabaseSync.Seed\Secure.SecurityDatabaseSync.Seed.csproj", "{40E073A7-C1B9-4455-B1AD-017BA67A0A3C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Secure.SecurityDatabaseSync.Seed", "src\Secure.SecurityDatabaseSync.Seed\Secure.SecurityDatabaseSync.Seed.csproj", "{40E073A7-C1B9-4455-B1AD-017BA67A0A3C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

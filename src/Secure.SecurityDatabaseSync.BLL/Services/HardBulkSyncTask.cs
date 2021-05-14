@@ -10,21 +10,21 @@ using System.Threading.Tasks;
 
 namespace Secure.SecurityDatabaseSync.BLL.Services
 {
-    /// <inheritdoc cref="ISyncService"/>
-    public class HardBulkSyncService : ISyncService, IDisposable
+    /// <inheritdoc cref="ISyncTask"/>
+    public class HardBulkSyncTask : ISyncTask, IDisposable
     {
         private readonly ApplicationContext _firstAppContext;
         private readonly ApplicationContext _secondAppContext;
         private readonly string _code;
 
-        public HardBulkSyncService(
-            string source,
-            string target,
+        public HardBulkSyncTask(
+            ApplicationContext sourceContext,
+            ApplicationContext targetContext,
             string code)
         {
-            _firstAppContext = new ApplicationContext(source);
-            _secondAppContext = new ApplicationContext(target);
-            _code = code;
+            _firstAppContext = sourceContext ?? throw new ArgumentNullException(nameof(sourceContext));
+            _secondAppContext = targetContext ?? throw new ArgumentNullException(nameof(targetContext));
+            _code = code.ToUpper();
         }
 
         public void Dispose()
@@ -37,17 +37,15 @@ namespace Secure.SecurityDatabaseSync.BLL.Services
 
         public async Task RunAsync()
         {
-            var firstAppContextModels =
-                await _firstAppContext.Commons
-                    .AsNoTracking()
-                    .Where(model => model.Code == _code)
-                    .ToListAsync();
+            var firstAppContextModels = await _firstAppContext.Commons
+                .AsNoTracking()
+                .Where(model => model.Code == _code)
+                .ToListAsync();
 
-            var secondAppContextModels =
-                await _secondAppContext.Commons
-                    .AsNoTracking()
-                    .Where(model => model.Code == _code)
-                    .ToListAsync();
+            var secondAppContextModels = await _secondAppContext.Commons
+                .AsNoTracking()
+                .Where(model => model.Code == _code)
+                .ToListAsync();
 
             await _secondAppContext.BulkDeleteAsync(secondAppContextModels);
 
@@ -65,7 +63,7 @@ namespace Secure.SecurityDatabaseSync.BLL.Services
                 }
             }
 
-            var modelsToAdd = GetModelsToAdd().ToList();
+            List<Common> modelsToAdd = GetModelsToAdd().ToList();
             await _secondAppContext.BulkInsertAsync(modelsToAdd);
         }
     }

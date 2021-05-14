@@ -1,4 +1,6 @@
-﻿using Secure.SecurityDatabaseSync.DAL.Contexts;
+﻿using Secure.SecurityDatabaseSync.DAL.Constants;
+using Secure.SecurityDatabaseSync.DAL.Contexts;
+using Secure.SecurityDatabaseSync.DAL.Extensions;
 using Secure.SecurityDatabaseSync.DAL.Models;
 using Secure.SecurityDatabaseSync.Seed.Resources;
 using System;
@@ -10,7 +12,7 @@ namespace Secure.SecurityDatabaseSync.Seed
 {
     internal class Program
     {
-        private async static Task Main(string[] args)
+        private async static Task Main()
         {
             string UserInput(string message)
             {
@@ -24,36 +26,43 @@ namespace Secure.SecurityDatabaseSync.Seed
             var code = UserInput(MessageResource.EnterCodeName);
             var count = int.Parse(UserInput(MessageResource.EnterCount));
 
-            IEnumerable<Common> GetModels()
+            if (count > 0)
             {
-                for (int i = 0; i < count; i++)
+                IEnumerable<Common> GetModels()
                 {
-                    var guid = Guid.NewGuid().ToString();
-
-                    yield return new Common
+                    for (int i = 0; i < count; i++)
                     {
-                        InternalNumber = guid,
-                        Code = code.ToUpper(),
-                        Name = Regex.Replace(guid, @"\d", ""),
-                        Updated = DateTime.Now,
-                    };
+                        var guid = Guid.NewGuid().ToString();
+
+                        yield return new Common
+                        {
+                            InternalNumber = guid,
+                            Code = code.ToUpper(),
+                            Name = Regex.Replace(guid, @"\d", ""),
+                            Updated = DateTime.Now,
+                        };
+                    }
+                }
+
+                try
+                {
+                    using ApplicationContext context = databaseName
+                        .GetApplicationContext(
+                            AppSettingConstant.AppSettingJsonName,
+                            AppSettingConstant.ConnectionStringSection);
+
+                    context.Database.EnsureCreated();
+                    await context.Commons.AddRangeAsync(GetModels());
+                    await context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(MessageResource.Error);
+                    Console.WriteLine(ex.StackTrace);
                 }
             }
 
-            try
-            {
-                using var context = new ApplicationContext(databaseName);
-                context.Database.EnsureCreated();
-                await context.Commons.AddRangeAsync(GetModels());
-                await context.SaveChangesAsync();
-
-                Console.WriteLine(MessageResource.End);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(MessageResource.Error);
-                Console.WriteLine(ex.StackTrace);
-            }
+            Console.WriteLine(MessageResource.End);
         }
     }
 }

@@ -1,5 +1,8 @@
 ﻿using Secure.SecurityDatabaseSync.BLL.Interfaces;
 using Secure.SecurityDatabaseSync.BLL.Services;
+using Secure.SecurityDatabaseSync.DAL.Constants;
+using Secure.SecurityDatabaseSync.DAL.Contexts;
+using Secure.SecurityDatabaseSync.DAL.Extensions;
 using Secure.SecurityDatabaseSync.UI.Resources;
 using System;
 using System.Threading.Tasks;
@@ -8,7 +11,7 @@ namespace Secure.SecurityDatabaseSync.UI
 {
     internal class Program
     {
-        private async static Task Main(string[] args)
+        private async static Task Main()
         {
             static string UserInput(
                 string message,
@@ -45,8 +48,7 @@ namespace Secure.SecurityDatabaseSync.UI
                     var code = UserInput(
                         MessageResource.EnterDatabaseCode,
                         MessageResource.InvalidCode,
-                        MessageResource.ParamCode)
-                        .ToUpper();
+                        MessageResource.ParamCode);
 
                     var targetDb = UserInput(
                         MessageResource.EnterDatabaseNameTarget,
@@ -57,7 +59,11 @@ namespace Secure.SecurityDatabaseSync.UI
                     {
                         case "--default":
                             {
-                                ISyncService defaultSyncService = new DefaultSyncService(sourceDb, targetDb, code);
+                                ISyncTask defaultSyncService = new DefaultSyncTask(
+                                    GetContext(sourceDb),
+                                    GetContext(targetDb),
+                                    code);
+
                                 await defaultSyncService.RunAsync();
                                 Console.WriteLine(MessageResource.CommandCompleted);
                             }
@@ -65,7 +71,10 @@ namespace Secure.SecurityDatabaseSync.UI
 
                         case "--bulk":
                             {
-                                ISyncService bulkSyncService = new BulkSyncService(sourceDb, targetDb, code);
+                                ISyncTask bulkSyncService = new BulkSyncTask(
+                                    GetContext(sourceDb),
+                                    GetContext(targetDb),
+                                    code);
                                 await bulkSyncService.RunAsync();
                                 Console.WriteLine(MessageResource.CommandCompleted);
                             }
@@ -73,7 +82,10 @@ namespace Secure.SecurityDatabaseSync.UI
 
                         case "--hard-bulk":
                             {
-                                ISyncService hardBulkSyncService = new HardBulkSyncService(sourceDb, targetDb, code);
+                                ISyncTask hardBulkSyncService = new HardBulkSyncTask(
+                                    GetContext(sourceDb),
+                                    GetContext(targetDb),
+                                    code);
                                 await hardBulkSyncService.RunAsync();
                                 Console.WriteLine(MessageResource.CommandCompleted);
                             }
@@ -98,5 +110,10 @@ namespace Secure.SecurityDatabaseSync.UI
                 }
             }
         }
+
+        private static ApplicationContext GetContext(string databaseName) =>
+            databaseName.GetApplicationContext(
+                    AppSettingConstant.AppSettingJsonName,
+                    AppSettingConstant.ConnectionStringSection);
     }
 }

@@ -3,9 +3,9 @@
 namespace Secure.SecurityDatabaseSync.BLL.Interfaces
 {
     /// <summary>
-    /// Synchronization service.
+    /// Synchronization task.
     /// </summary>
-    public interface ISyncService
+    public interface ISyncTask
     {
         /// <summary>
         /// Run.

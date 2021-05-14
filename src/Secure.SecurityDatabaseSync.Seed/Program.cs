@@ -1,5 +1,6 @@
 ﻿using Secure.SecurityDatabaseSync.DAL.Contexts;
 using Secure.SecurityDatabaseSync.DAL.Models;
+using Secure.SecurityDatabaseSync.Seed.Resources;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -9,18 +10,19 @@ namespace Secure.SecurityDatabaseSync.Seed
 {
     internal class Program
     {
-        private static async Task Main(string[] args)
+        private async static Task Main(string[] args)
         {
-            Console.WriteLine("Database filling started..");
+            string UserInput(string message)
+            {
+                Console.Write(message);
+                return Console.ReadLine();
+            }
 
-            Console.Write("Enter database name: ");
-            var databaseName = Console.ReadLine();
+            Console.WriteLine(MessageResource.Start);
 
-            Console.Write("Enter code name: ");
-            var code = Console.ReadLine();
-
-            Console.Write("Enter count of entities: ");
-            var count = int.Parse(Console.ReadLine());
+            var databaseName = UserInput(MessageResource.EnterDatabaseName);
+            var code = UserInput(MessageResource.EnterCodeName);
+            var count = int.Parse(UserInput(MessageResource.EnterCount));
 
             IEnumerable<Common> GetModels()
             {
@@ -45,11 +47,11 @@ namespace Secure.SecurityDatabaseSync.Seed
                 await context.Commons.AddRangeAsync(GetModels());
                 await context.SaveChangesAsync();
 
-                Console.WriteLine("Database filling ended..");
+                Console.WriteLine(MessageResource.End);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Database filling ended with error..");
+                Console.WriteLine(MessageResource.Error);
                 Console.WriteLine(ex.StackTrace);
             }
         }

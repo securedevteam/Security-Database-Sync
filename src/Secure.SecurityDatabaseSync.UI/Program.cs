@@ -1,5 +1,6 @@
 ﻿using Secure.SecurityDatabaseSync.BLL.Interfaces;
 using Secure.SecurityDatabaseSync.BLL.Services;
+using Secure.SecurityDatabaseSync.UI.Resources;
 using System;
 using System.Threading.Tasks;
 
@@ -7,42 +8,50 @@ namespace Secure.SecurityDatabaseSync.UI
 {
     internal class Program
     {
-        private static async Task Main(string[] args)
+        private async static Task Main(string[] args)
         {
-            Console.WriteLine(UiConstant.COMMAND_AVAILABLE_LIST);
+            static string UserInput(
+                string message,
+                string errorMessage,
+                string paramName)
+            {
+                Console.Write(message);
+                var input = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(input))
+                {
+                    throw new ArgumentException(errorMessage, paramName);
+                }
+
+                return input;
+            }
+
+            Console.WriteLine(MessageResource.CommandAvailableList);
             while (true)
             {
                 Console.WriteLine();
 
                 try
                 {
-                    Console.Write(UiConstant.ENTER_SYNC_TYPE);
-                    var syncType = Console.ReadLine();
-                    if (string.IsNullOrWhiteSpace(syncType))
-                    {
-                        throw new ArgumentException(UiConstant.INVALID_DATABASE_SOURCE, nameof(syncType));
-                    }
+                    var syncType = UserInput(
+                        MessageResource.EnterSyncType,
+                        MessageResource.InvalidSyncType,
+                        MessageResource.ParamSyncType);
 
-                    Console.Write(UiConstant.ENTER_DATABASE_SOURCE);
-                    var sourceDb = Console.ReadLine();
-                    if (string.IsNullOrWhiteSpace(sourceDb))
-                    {
-                        throw new ArgumentException(UiConstant.INVALID_DATABASE_SOURCE, nameof(sourceDb));
-                    }
+                    var sourceDb = UserInput(
+                        MessageResource.EnterDatabaseNameSource,
+                        MessageResource.InvalidDatabaseSource,
+                        MessageResource.ParamSourceDb);
 
-                    Console.Write(UiConstant.ENTER_DATABASE_CODE);
-                    var code = Console.ReadLine().ToUpper();
-                    if (string.IsNullOrWhiteSpace(code))
-                    {
-                        throw new ArgumentException(UiConstant.INVALID_CODE, nameof(code));
-                    }
+                    var code = UserInput(
+                        MessageResource.EnterDatabaseCode,
+                        MessageResource.InvalidCode,
+                        MessageResource.ParamCode)
+                        .ToUpper();
 
-                    Console.Write(UiConstant.ENTER_DATABASE_TARGET);
-                    var targetDb = Console.ReadLine();
-                    if (string.IsNullOrWhiteSpace(targetDb))
-                    {
-                        throw new ArgumentException(UiConstant.INVALID_DATABASE_TARGET, nameof(targetDb));
-                    }
+                    var targetDb = UserInput(
+                        MessageResource.EnterDatabaseNameTarget,
+                        MessageResource.InvalidDatabaseTarget,
+                        MessageResource.ParamTargetDb);
 
                     switch (syncType)
                     {
@@ -50,7 +59,7 @@ namespace Secure.SecurityDatabaseSync.UI
                             {
                                 ISyncService defaultSyncService = new DefaultSyncService(sourceDb, targetDb, code);
                                 await defaultSyncService.RunAsync();
-                                Console.WriteLine(UiConstant.COMMAND_COMPLETED);
+                                Console.WriteLine(MessageResource.CommandCompleted);
                             }
                             break;
 
@@ -58,7 +67,7 @@ namespace Secure.SecurityDatabaseSync.UI
                             {
                                 ISyncService bulkSyncService = new BulkSyncService(sourceDb, targetDb, code);
                                 await bulkSyncService.RunAsync();
-                                Console.WriteLine(UiConstant.COMMAND_COMPLETED);
+                                Console.WriteLine(MessageResource.CommandCompleted);
                             }
                             break;
 
@@ -66,7 +75,7 @@ namespace Secure.SecurityDatabaseSync.UI
                             {
                                 ISyncService hardBulkSyncService = new HardBulkSyncService(sourceDb, targetDb, code);
                                 await hardBulkSyncService.RunAsync();
-                                Console.WriteLine(UiConstant.COMMAND_COMPLETED);
+                                Console.WriteLine(MessageResource.CommandCompleted);
                             }
                             break;
 
@@ -77,14 +86,14 @@ namespace Secure.SecurityDatabaseSync.UI
 
                         default:
                             {
-                                Console.WriteLine(UiConstant.COMMAND_INVALID);
+                                Console.WriteLine(MessageResource.CommandInvalid);
                             }
                             break;
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(UiConstant.COMMAND_FAILED);
+                    Console.WriteLine(MessageResource.CommandFailed);
                     Console.WriteLine(ex.StackTrace);
                 }
             }

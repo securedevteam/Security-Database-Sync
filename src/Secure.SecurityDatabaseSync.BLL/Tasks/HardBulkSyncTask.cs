@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Secure.SecurityDatabaseSync.BLL.Services
+namespace Secure.SecurityDatabaseSync.BLL.Tasks
 {
     /// <inheritdoc cref="ISyncTask"/>
     public class HardBulkSyncTask : ISyncTask, IDisposable

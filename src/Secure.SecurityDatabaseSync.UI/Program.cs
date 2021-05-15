@@ -1,5 +1,5 @@
 ﻿using Secure.SecurityDatabaseSync.BLL.Interfaces;
-using Secure.SecurityDatabaseSync.BLL.Services;
+using Secure.SecurityDatabaseSync.BLL.Tasks;
 using Secure.SecurityDatabaseSync.DAL.Constants;
 using Secure.SecurityDatabaseSync.DAL.Contexts;
 using Secure.SecurityDatabaseSync.DAL.Extensions;

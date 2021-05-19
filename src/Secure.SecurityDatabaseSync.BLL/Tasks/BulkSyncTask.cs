@@ -121,11 +121,14 @@ namespace Secure.SecurityDatabaseSync.BLL.Tasks
 
                     var isUpdated = false;
 
-                    if (targetModel.Name != sourceModel.Name)
+                    if (sourceModel is not null)
                     {
-                        isUpdated = true;
-                        targetModel.Name = sourceModel.Name;
-                        targetModel.Updated = DateTime.Now;
+                        if (targetModel.Name != sourceModel.Name)
+                        {
+                            isUpdated = true;
+                            targetModel.Name = sourceModel.Name;
+                            targetModel.Updated = DateTime.Now;
+                        }
                     }
 
                     if (isUpdated)

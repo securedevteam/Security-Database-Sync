@@ -132,14 +132,11 @@ namespace Secure.SecurityDatabaseSync.BLL.Tasks
                 foreach (var model in models)
                 {
                     var common = _targetModels
-                        .FirstOrDefault(targetModel =>
+                        .First(targetModel =>
                             targetModel.InternalNumber == model.InternalNumber);
 
-                    if (common is not null)
-                    {
-                        common.Name = model.Name;
-                        common.Updated = DateTime.Now;
-                    }
+                    common.Name = model.Name;
+                    common.Updated = DateTime.Now;
 
                     _targetContext.Commons.Update(common);
                 }

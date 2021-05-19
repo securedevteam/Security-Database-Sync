@@ -123,6 +123,9 @@
   <data name="CommandCompleted" xml:space="preserve">
     <value>&gt;&gt; Command completed successfully!</value>
   </data>
+  <data name="CommandError" xml:space="preserve">
+    <value>An error occurred while processing command.</value>
+  </data>
   <data name="CommandFailed" xml:space="preserve">
     <value>&gt;&gt; Command failed!</value>
   </data>

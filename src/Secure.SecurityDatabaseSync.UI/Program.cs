@@ -28,6 +28,14 @@ namespace Secure.SecurityDatabaseSync.UI
                 return input;
             }
 
+            async Task RunSyncServiceAsync(ISyncTask syncService)
+            {
+                await syncService.RunAsync();
+                Console.WriteLine(MessageResource.CommandCompleted);
+            }
+
+            ISyncTask syncService;
+
             Console.WriteLine(MessageResource.CommandAvailableList);
             while (true)
             {
@@ -59,35 +67,34 @@ namespace Secure.SecurityDatabaseSync.UI
                     {
                         case "--default":
                             {
-                                ISyncTask defaultSyncService = new DefaultSyncTask(
+                                syncService = new DefaultSyncTask(
                                     GetContext(sourceDb),
                                     GetContext(targetDb),
                                     code);
 
-                                await defaultSyncService.RunAsync();
-                                Console.WriteLine(MessageResource.CommandCompleted);
+                                await RunSyncServiceAsync(syncService);
                             }
                             break;
 
                         case "--bulk":
                             {
-                                ISyncTask bulkSyncService = new BulkSyncTask(
+                                syncService = new BulkSyncTask(
                                     GetContext(sourceDb),
                                     GetContext(targetDb),
                                     code);
-                                await bulkSyncService.RunAsync();
-                                Console.WriteLine(MessageResource.CommandCompleted);
+
+                                await RunSyncServiceAsync(syncService);
                             }
                             break;
 
                         case "--hard-bulk":
                             {
-                                ISyncTask hardBulkSyncService = new HardBulkSyncTask(
+                                syncService = new HardBulkSyncTask(
                                     GetContext(sourceDb),
                                     GetContext(targetDb),
                                     code);
-                                await hardBulkSyncService.RunAsync();
-                                Console.WriteLine(MessageResource.CommandCompleted);
+
+                                await RunSyncServiceAsync(syncService);
                             }
                             break;
 
@@ -103,9 +110,13 @@ namespace Secure.SecurityDatabaseSync.UI
                             break;
                     }
                 }
-                catch (Exception ex)
+                catch (ArgumentException ex)
                 {
                     Console.WriteLine(MessageResource.CommandFailed);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(MessageResource.CommandError);
                     Console.WriteLine(ex.StackTrace);
                 }
             }

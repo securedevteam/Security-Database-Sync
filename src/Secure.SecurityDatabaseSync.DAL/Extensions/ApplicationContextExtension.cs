@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Secure.SecurityDatabaseSync.DAL.Contexts;
+using System;
 
 namespace Secure.SecurityDatabaseSync.DAL.Extensions
 {
@@ -19,15 +20,32 @@ namespace Secure.SecurityDatabaseSync.DAL.Extensions
         public static ApplicationContext GetApplicationContext(
             this string databaseName,
             string appSettingJson,
-            string section) =>
-                new ApplicationContext(
-                    new DbContextOptionsBuilder<ApplicationContext>()
-                        .UseSqlServer(new ConfigurationBuilder()
-                            .AddJsonFile(appSettingJson, optional: true, reloadOnChange: true)
-                            .Build()
-                            .GetSection(section)
-                            .Value
-                            .Replace("%databaseName%", databaseName))
-                        .Options);
+            string section)
+        {
+            if (string.IsNullOrEmpty(databaseName))
+            {
+                throw new ArgumentException($"'{nameof(databaseName)}' cannot be null or empty.", nameof(databaseName));
+            }
+
+            if (string.IsNullOrEmpty(appSettingJson))
+            {
+                throw new ArgumentException($"'{nameof(appSettingJson)}' cannot be null or empty.", nameof(appSettingJson));
+            }
+
+            if (string.IsNullOrEmpty(section))
+            {
+                throw new ArgumentException($"'{nameof(section)}' cannot be null or empty.", nameof(section));
+            }
+
+            return new ApplicationContext(
+                new DbContextOptionsBuilder<ApplicationContext>()
+                    .UseSqlServer(new ConfigurationBuilder()
+                        .AddJsonFile(appSettingJson, optional: true, reloadOnChange: true)
+                        .Build()
+                        .GetSection(section)
+                        .Value
+                        .Replace("%databaseName%", databaseName))
+                    .Options);
+        }
     }
 }

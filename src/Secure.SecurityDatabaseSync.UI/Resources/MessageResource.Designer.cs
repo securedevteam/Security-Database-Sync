@@ -79,6 +79,15 @@ namespace Secure.SecurityDatabaseSync.UI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error occurred while processing command..
+        /// </summary>
+        internal static string CommandError {
+            get {
+                return ResourceManager.GetString("CommandError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &gt;&gt; Command failed!.
         /// </summary>
         internal static string CommandFailed {

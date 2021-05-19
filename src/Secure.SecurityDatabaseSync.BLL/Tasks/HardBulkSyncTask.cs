@@ -4,7 +4,6 @@ using Secure.SecurityDatabaseSync.BLL.Interfaces;
 using Secure.SecurityDatabaseSync.DAL.Contexts;
 using Secure.SecurityDatabaseSync.DAL.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -49,21 +48,16 @@ namespace Secure.SecurityDatabaseSync.BLL.Tasks
 
             await _secondAppContext.BulkDeleteAsync(secondAppContextModels);
 
-            IEnumerable<Common> GetModelsToAdd()
-            {
-                foreach (var firstModel in firstAppContextModels)
+            var modelsToAdd = firstAppContextModels
+                .Select(firstModel => new Common
                 {
-                    yield return new Common
-                    {
-                        InternalNumber = firstModel.InternalNumber,
-                        Code = _code,
-                        Name = firstModel.Name,
-                        Updated = DateTime.Now,
-                    };
-                }
-            }
+                    InternalNumber = firstModel.InternalNumber,
+                    Code = _code,
+                    Name = firstModel.Name,
+                    Updated = DateTime.Now,
+                })
+                .ToList();
 
-            List<Common> modelsToAdd = GetModelsToAdd().ToList();
             await _secondAppContext.BulkInsertAsync(modelsToAdd);
         }
     }

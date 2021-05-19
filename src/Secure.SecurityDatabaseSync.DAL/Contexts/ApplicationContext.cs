@@ -11,7 +11,7 @@ namespace Secure.SecurityDatabaseSync.DAL.Contexts
     public class ApplicationContext : DbContext
     {
         /// <summary>
-        /// Contructor with params.
+        /// Constructor with params.
         /// </summary>
         /// <param name="options">Database context options.</param>
         public ApplicationContext(DbContextOptions<ApplicationContext> options)

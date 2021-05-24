@@ -1,5 +1,9 @@
 ﻿using Secure.SecurityDatabaseSync.BLL.Interfaces;
-using Secure.SecurityDatabaseSync.BLL.Services;
+using Secure.SecurityDatabaseSync.BLL.Tasks;
+using Secure.SecurityDatabaseSync.DAL.Constants;
+using Secure.SecurityDatabaseSync.DAL.Contexts;
+using Secure.SecurityDatabaseSync.DAL.Extensions;
+using Secure.SecurityDatabaseSync.UI.Resources;
 using System;
 using System.Threading.Tasks;
 
@@ -7,66 +11,90 @@ namespace Secure.SecurityDatabaseSync.UI
 {
     internal class Program
     {
-        private static async Task Main(string[] args)
+        private async static Task Main()
         {
-            Console.WriteLine(UiConstant.COMMAND_AVAILABLE_LIST);
+            static string UserInput(
+                string message,
+                string errorMessage,
+                string paramName)
+            {
+                Console.Write(message);
+                var input = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(input))
+                {
+                    throw new ArgumentException(errorMessage, paramName);
+                }
+
+                return input;
+            }
+
+            async Task RunSyncServiceAsync(ISyncTask syncService)
+            {
+                await syncService.RunAsync();
+                Console.WriteLine(MessageResource.CommandCompleted);
+            }
+
+            ISyncTask syncService;
+
+            Console.WriteLine(MessageResource.CommandAvailableList);
             while (true)
             {
                 Console.WriteLine();
 
                 try
                 {
-                    Console.Write(UiConstant.ENTER_SYNC_TYPE);
-                    var syncType = Console.ReadLine();
-                    if (string.IsNullOrWhiteSpace(syncType))
-                    {
-                        throw new ArgumentException(UiConstant.INVALID_DATABASE_SOURCE, nameof(syncType));
-                    }
+                    var syncType = UserInput(
+                        MessageResource.EnterSyncType,
+                        MessageResource.InvalidSyncType,
+                        MessageResource.ParamSyncType);
 
-                    Console.Write(UiConstant.ENTER_DATABASE_SOURCE);
-                    var sourceDb = Console.ReadLine();
-                    if (string.IsNullOrWhiteSpace(sourceDb))
-                    {
-                        throw new ArgumentException(UiConstant.INVALID_DATABASE_SOURCE, nameof(sourceDb));
-                    }
+                    var sourceDb = UserInput(
+                        MessageResource.EnterDatabaseNameSource,
+                        MessageResource.InvalidDatabaseSource,
+                        MessageResource.ParamSourceDb);
 
-                    Console.Write(UiConstant.ENTER_DATABASE_CODE);
-                    var code = Console.ReadLine().ToUpper();
-                    if (string.IsNullOrWhiteSpace(code))
-                    {
-                        throw new ArgumentException(UiConstant.INVALID_CODE, nameof(code));
-                    }
+                    var code = UserInput(
+                        MessageResource.EnterDatabaseCode,
+                        MessageResource.InvalidCode,
+                        MessageResource.ParamCode);
 
-                    Console.Write(UiConstant.ENTER_DATABASE_TARGET);
-                    var targetDb = Console.ReadLine();
-                    if (string.IsNullOrWhiteSpace(targetDb))
-                    {
-                        throw new ArgumentException(UiConstant.INVALID_DATABASE_TARGET, nameof(targetDb));
-                    }
+                    var targetDb = UserInput(
+                        MessageResource.EnterDatabaseNameTarget,
+                        MessageResource.InvalidDatabaseTarget,
+                        MessageResource.ParamTargetDb);
 
                     switch (syncType)
                     {
                         case "--default":
                             {
-                                ISyncService defaultSyncService = new DefaultSyncService(sourceDb, targetDb, code);
-                                await defaultSyncService.RunAsync();
-                                Console.WriteLine(UiConstant.COMMAND_COMPLETED);
+                                syncService = new DefaultSyncTask(
+                                    GetContext(sourceDb),
+                                    GetContext(targetDb),
+                                    code);
+
+                                await RunSyncServiceAsync(syncService);
                             }
                             break;
 
                         case "--bulk":
                             {
-                                ISyncService bulkSyncService = new BulkSyncService(sourceDb, targetDb, code);
-                                await bulkSyncService.RunAsync();
-                                Console.WriteLine(UiConstant.COMMAND_COMPLETED);
+                                syncService = new BulkSyncTask(
+                                    GetContext(sourceDb),
+                                    GetContext(targetDb),
+                                    code);
+
+                                await RunSyncServiceAsync(syncService);
                             }
                             break;
 
                         case "--hard-bulk":
                             {
-                                ISyncService hardBulkSyncService = new HardBulkSyncService(sourceDb, targetDb, code);
-                                await hardBulkSyncService.RunAsync();
-                                Console.WriteLine(UiConstant.COMMAND_COMPLETED);
+                                syncService = new HardBulkSyncTask(
+                                    GetContext(sourceDb),
+                                    GetContext(targetDb),
+                                    code);
+
+                                await RunSyncServiceAsync(syncService);
                             }
                             break;
 
@@ -77,17 +105,26 @@ namespace Secure.SecurityDatabaseSync.UI
 
                         default:
                             {
-                                Console.WriteLine(UiConstant.COMMAND_INVALID);
+                                Console.WriteLine(MessageResource.CommandInvalid);
                             }
                             break;
                     }
                 }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine(MessageResource.CommandFailed);
+                }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(UiConstant.COMMAND_FAILED);
+                    Console.WriteLine(MessageResource.CommandError);
                     Console.WriteLine(ex.StackTrace);
                 }
             }
         }
+
+        private static ApplicationContext GetContext(string databaseName) =>
+            databaseName.GetApplicationContext(
+                    AppSettingConstant.AppSettingJsonName,
+                    AppSettingConstant.ConnectionStringSection);
     }
 }

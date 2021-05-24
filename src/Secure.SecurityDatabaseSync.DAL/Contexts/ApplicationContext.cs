@@ -10,15 +10,13 @@ namespace Secure.SecurityDatabaseSync.DAL.Contexts
     /// </summary>
     public class ApplicationContext : DbContext
     {
-        private readonly string _databaseName;
-
         /// <summary>
         /// Constructor with params.
         /// </summary>
-        /// <param name="databaseName">Database name.</param>
-        public ApplicationContext(string databaseName)
+        /// <param name="options">Database context options.</param>
+        public ApplicationContext(DbContextOptions<ApplicationContext> options)
+            : base(options)
         {
-            _databaseName = databaseName;
         }
 
         /// <summary>
@@ -33,11 +31,6 @@ namespace Secure.SecurityDatabaseSync.DAL.Contexts
             builder.ApplyConfiguration(new CommonConfiguration());
 
             base.OnModelCreating(builder);
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer($"Server=(localdb)\\mssqllocaldb;Database={_databaseName};Trusted_Connection=True;");
         }
     }
 }

@@ -1,6 +1,6 @@
-# Database Sync
+# Security Database Sync
 
-[![Build Status](https://dev.azure.com/30CTB/Security-Database-Sync/_apis/build/status/securedevteam.Security-Database-Sync?branchName=master)](https://dev.azure.com/30CTB/Security-Database-Sync/_build/latest?definitionId=3&branchName=master)
+[![.NET](https://github.com/securedevteam/Security-Database-Sync/actions/workflows/dotnet.yml/badge.svg)](https://github.com/securedevteam/Security-Database-Sync/actions/workflows/dotnet.yml)
 
 The developed software allows synchronization for the N-number of databases with identical tables. The idea of this project was the need for synchronization of MS SQL Server databases, where the server must constantly have up-to-date (updated) data from all other databases. This application has a number of features for synchronization, cleaning and template filling of a specific table in the database. The main application interface is implemented as a Console App.
 
